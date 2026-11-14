@@ -69,8 +69,6 @@ services:
       - "--storage.tsdb.retention.time=15d"
     networks:
       - urlshortener-net
-    depends_on:
-      - app
 
   grafana:
     image: grafana/grafana:11.3.1
