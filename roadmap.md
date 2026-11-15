@@ -52,11 +52,11 @@ You can start applying for jobs after week 18. Phases 0–2 already make a stron
 
 **Goal:** stop fighting the tools so the labs are about system design.
 
-- [ ] Spring Boot 3 + Java 21 CRUD app with Postgres
-- [ ] Flyway migrations and Testcontainers integration tests
-- [ ] Docker Compose with app, Postgres, Prometheus, and Grafana
-- [ ] Micrometer metrics wired in, with a basic latency dashboard
-- [ ] JPA pitfall demos: N+1 queries, lazy loading, transaction boundaries
+- [x] Spring Boot 3 + Java 21 CRUD app with Postgres
+- [x] Flyway migrations and Testcontainers integration tests
+- [x] Docker Compose with app, Postgres, Prometheus, and Grafana
+- [x] Micrometer metrics wired in, with a basic latency dashboard
+- [x] JPA pitfall demos: N+1 queries, lazy loading, transaction boundaries
 - [ ] Read DDIA chapters 1–3 alongside
 
 **Done when:** one command starts the whole stack and you can see request latency in Grafana.
@@ -324,8 +324,8 @@ benchmarks/
 
 | Phase | Status | Start date | End date | Notes |
 | --- | --- | --- | --- | --- |
-| 0. Foundation | Not started |  |  |  |
-| 1. URL Shortener | Not started |  |  |  |
+| 0. Foundation | Completed | 2026-11-14 | 2026-11-15 | Skeleton, metrics wiring, JPA pitfall demos verified |
+| 1. URL Shortener | In progress | 2026-11-15 |  |  |
 | 2. Rate Limiter | Not started |  |  |  |
 | Checkpoint | Not started |  |  |  |
 | 3. Background Jobs | Not started |  |  |  |
