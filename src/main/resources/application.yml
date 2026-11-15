@@ -45,6 +45,9 @@ management:
   metrics:
     tags:
       application: url-shortener
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
 
 server:
   port: ${SERVER_PORT:8080}
