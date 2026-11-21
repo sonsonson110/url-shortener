@@ -7,20 +7,24 @@ Record of the quiz questions for interview-critical pieces (see `AGENTS.md` sect
 1. The agent adds a question under **Open questions** with a date and the piece it belongs to.
 2. The owner answers in the `Answer` field, before seeing any reference answer.
 3. The agent grades it: `correct`, `partial`, or `wrong`, with a short explanation of what was missing.
-4. Set `Re-ask` to about 7 days after the answer. Anything graded `partial` or `wrong` is re-asked at the next session start (see `AGENTS.md` section 12).
-5. After two consecutive `correct` answers, move the entry to **Retired**.
+4. Schedule with Leitner boxes. Intervals: box 1 = 1 day, 2 = 3 days, 3 = 7 days, 4 = 14 days, 5 = 30 days. `correct` moves up one box, `partial` stays, `wrong` goes back to box 1. `Re-ask` = answer date + the new box's interval. Anything due or graded `partial`/`wrong` is re-asked at the next session start (see `AGENTS.md` section 12) or in the phone quiz.
+5. A `correct` answer while in box 5 retires the entry: move it to **Retired**.
+
+Questions come from two places: the session quizzes below (`Q<n>`, called `LL-Q<n>` in the phone quiz) and the question bank (`docs/quiz/question-bank.md`, IDs like `JPA-05`). Phone results are synced in with `/quiz-sync ingest` (see `docs/quiz/README.md`).
 
 Entry format:
 
 ```text
-### Q<n>: <short title>
+### Q<n> or <BANK-ID>: <short title>
 - Piece: <file or ADR>
 - Asked: YYYY-MM-DD
-- Question: <text>
+- Question: <text, or "see question bank">
 - Answer: <owner's words, or "unanswered">
 - Verdict: <correct | partial | wrong | pending>
 - Feedback: <what was right, what was missing>
+- Box: <1-5>
 - Re-ask: <YYYY-MM-DD or "after first answer">
+- History: <one line per earlier attempt: "- YYYY-MM-DD: verdict"; omit if none>
 ```
 
 ## Open questions
@@ -32,6 +36,7 @@ Entry format:
 - Answer: unanswered
 - Verdict: pending
 - Feedback:
+- Box: 1
 - Re-ask: after first answer
 
 ### Q2: What happens to the sequence value when the insert rolls back?
@@ -41,6 +46,7 @@ Entry format:
 - Answer: unanswered
 - Verdict: pending
 - Feedback:
+- Box: 1
 - Re-ask: after first answer
 
 ### Q3: Find the bug in counter placement
@@ -50,6 +56,7 @@ Entry format:
 - Answer: unanswered
 - Verdict: pending
 - Feedback:
+- Box: 1
 - Re-ask: after first answer
 
 ### Q4: Expiry boundary
@@ -59,6 +66,7 @@ Entry format:
 - Answer: unanswered
 - Verdict: pending
 - Feedback:
+- Box: 1
 - Re-ask: after first answer
 
 ### Q5: Guessable codes
@@ -68,6 +76,7 @@ Entry format:
 - Answer: unanswered
 - Verdict: pending
 - Feedback:
+- Box: 1
 - Re-ask: after first answer
 
 ## Retired

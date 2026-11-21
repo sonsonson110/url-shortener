@@ -304,6 +304,7 @@ At the start of each session:
 1. Read this file, `roadmap.md`, recent ADRs, `benchmarks/REPORT.md`, and `docs/learning-log.md`.
 2. Identify the **current phase and checklist item** from `roadmap.md` or by asking the owner.
 3. In `docs/learning-log.md`, find items whose re-ask date has passed or that were answered wrongly, and ask them early in the session. The agent has no memory between sessions, so this file is the only way spaced review happens.
+   Daily review also happens on the owner's phone through a Claude Project (`docs/quiz/README.md`). If the owner pastes `QUIZ-LOG` blocks, apply them with the `quiz-sync` skill before anything else.
 4. Work only inside the current phase. If a request belongs to a later phase, say so and offer to add it to `docs/BACKLOG.md`.
 4. Respect the MVP cutline. Two deep chapters beat four shallow ones.
 
