@@ -1,0 +1,33 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+**Read [AGENTS.md](AGENTS.md) first — it is authoritative** (mentor-vs-builder collaboration mode, hard rules on never fabricating results, phase gate, benchmark/failure-test protocols, Definition of Done, end-of-task report format). Scope and phase order live in [roadmap.md](roadmap.md) (AGENTS.md calls it `ROADMAP.md`; the actual filename is lowercase). Commit messages and benchmark tags follow `.agents/skills/git-conventions/SKILL.md`.
+
+## Commands
+
+Maven wrapper + Makefile. The Makefile defaults `JAVA_HOME` to `/usr/local/android-studio/jbr` (override with `JAVA_HOME=... make ...`); the project targets Java 21.
+
+```bash
+make build                 # ./mvnw package -DskipTests
+make test                  # ./mvnw test — needs Docker (Testcontainers starts real Postgres)
+./mvnw test -Dtest=LinkRepositoryTest                 # single test class
+./mvnw test -Dtest=NplusOneDemoTest#methodName        # single test method
+make up-infra              # postgres, redis, prometheus, grafana, loki only (run the app from the IDE/mvn)
+make up / make down        # full stack incl. app container (deploy/docker-compose.yml)
+make db-shell              # psql in the running postgres container
+make bench VERSION=v0-naive  # currently just runs k6 against the redirect scenario; the
+                             # "clean stack + seed + warmup" pipeline from AGENTS.md §7 is not built yet
+```
+
+Notes: `make test-unit` filters on `-Dgroups="unit"` but no tests are tagged `@Tag("unit")` yet, so it runs nothing. `make format` is a placeholder. `src/test/resources/docker-java.properties` pins `api.version=1.44` for Testcontainers against newer Docker daemons — keep it.
+
+## Architecture
+
+Single Spring Boot 3 / Java 21 app, package-by-feature under `com.urlshortener`. Currently only `shortener` (`Link` entity, `LinkRepository`, `LinkService`, `LinkController` at `/api/v1/links`); the controller has no endpoints yet (Phase 1 TODO). Planned feature packages (`ratelimit`, `jobs`) are not started.
+
+- **Schema is owned by Flyway** (`src/main/resources/db/migration`); Hibernate is `ddl-auto: validate`, `open-in-view: false`. Never edit an applied migration — add a new `V<n>__*.sql`.
+- **Config is env-driven** with local defaults in `application.yml` (`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `REDIS_HOST/PORT`, `HIKARI_MAX_POOL_SIZE`, `SERVER_PORT`); `.env.example` lists them. Redis config exists but no Redis code is wired yet.
+- **Observability baseline:** Actuator exposes `health,info,prometheus,metrics`; `http.server.requests` publishes percentile histograms. Prometheus scrape config and the provisioned Grafana dashboard/datasources (fixed UIDs) are under `deploy/`. New endpoints/jobs must add RED metrics in the same change.
+- **Tests use real infrastructure:** `@Testcontainers` + `@DynamicPropertySource` with a Postgres container (no H2/mocks). `src/test/java/com/urlshortener/jpademo/` (with its own `model/` and `repository/`) holds deliberate JPA-pitfall demos (N+1, lazy-init, transaction boundaries/connection starvation) — they are teaching artifacts, not production code; don't "fix" the pitfalls in them.
+- **Benchmarks:** k6 scenario in `benchmarks/k6/scenarios/`, raw output goes to `benchmarks/results/<version>/`, summaries in `benchmarks/REPORT.md`. Any number in docs must come from a saved real run.
