@@ -9,7 +9,7 @@
 **Strategy:**
 
 - Build **one coherent system** instead of four separate toy repos. A URL shortener is the core. A rate limiter protects it, background jobs power its analytics and cleanup, and observability covers all of it. One story is easier to tell in an interview than four exercises.
-- Every chapter must contain **at least one engineering challenge that you solve yourself and can prove** with tests, benchmarks, or failure experiments.
+- Every chapter must contain **at least one engineering challenge that you own and can prove** with tests, benchmarks, or failure experiments. The agent may write the code, but you make the design decision, answer the quiz in your own words, and can explain the failure cases without notes.
 - Keep the stack **boring and industry-standard** so the learning goes into system design, not tooling.
 - Put observability in place **early**, because honest benchmark numbers need metrics.
 
@@ -19,7 +19,8 @@
 - **Background:** 1.5 years of React, Node.js, and Kubernetes. Java and Spring are new, so expect a slow start in Phase 0.
 - **Weekdays (2–4h):** reading (DDIA chapters, Postgres docs), small tasks, tests, and notes. This is work that survives interruption.
 - **Weekends (6–8h):** deep work such as building features, running benchmarks, and failure testing. These need uninterrupted time.
-- **End of every chapter:** one write-up and one 5-minute spoken walkthrough, practiced aloud or recorded.
+- **Review loop:** the agent implements; you review. For interview-critical pieces (ID generation, caching, atomicity, queues, retries, idempotency, indexes, SLOs), you first predict the approach, then are quizzed after implementation and answer in your own words, and sometimes find a planted bug. Misses go in `docs/learning-log.md` and are re-asked about a week later. Boilerplate (DTOs, config, dashboards, scaffolding) gets a normal review only. Details are in `AGENTS.md` section 2.1.
+- **End of every chapter:** one write-up and one 5-minute spoken walkthrough, practiced aloud or recorded. The walkthrough is a pass/fail gate for closing the chapter, not an optional extra.
 
 ## 3. Roadmap at a Glance
 
@@ -94,7 +95,7 @@ You can start applying for jobs after week 18. Phases 0–2 already make a stron
 - [ ] Helm chart
 - [ ] README with architecture diagram and real numbers
 
-**Done when:** the README answers all the key questions with real numbers, and you can explain why you chose your ID strategy.
+**Done when:** the README answers all the key questions with real numbers, you can explain why you chose your ID strategy, and you can explain the key decisions (ID generation, 301 vs 302, stampede protection) and their failure cases aloud without notes.
 
 ## 7. Phase 2: Distributed Rate Limiter (Weeks 12–17)
 
@@ -124,7 +125,7 @@ You can start applying for jobs after week 18. Phases 0–2 already make a stron
 - [ ] Toxiproxy test for Redis failure, with documented fail-open or fail-closed decision
 - [ ] Overhead benchmark and write-up
 
-**Done when:** you can show a test where 5 instances under concurrent load never exceed the limit.
+**Done when:** you can show a test where 5 instances under concurrent load never exceed the limit, and you can explain aloud without notes why a naive read-then-write breaks and what happens when Redis dies.
 
 ## 8. Checkpoint: Polish and Start Applying (Week 18)
 

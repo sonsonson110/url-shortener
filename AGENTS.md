@@ -21,7 +21,7 @@ This repository is a **learning vehicle and a job-hunting portfolio**, not just 
   - **Distributed Rate Limiter**: protects create and redirect endpoints across multiple instances.
   - **Background Job Processing**: click-analytics aggregation and link-expiry cleanup, with retries and idempotency.
   - **Observability**: metrics, logs, traces, SLOs, and fault diagnosis across everything.
-- **Source of truth for scope and order:** `ROADMAP.md` in the repo root (rename the reference here if the file has a different name). It defines phases, MVP cutlines, checklists, and "done when" criteria.
+- **Source of truth for scope and order:** `roadmap.md` in the repo root (rename the reference here if the file has a different name). It defines phases, MVP cutlines, checklists, and "done when" criteria.
 - **Owner background:** about 1.5 years of React and Node.js, plus Kubernetes. **New to Java and Spring.** Works roughly 10-12 hours per week. No deadline, so correctness and understanding beat speed.
 
 ### Fixed technology stack
@@ -43,9 +43,9 @@ This repository is a **learning vehicle and a job-hunting portfolio**, not just 
 
 ## 2. How to Collaborate (Mentor vs Builder Mode)
 
-### 2.1 Mentor mode (default for core engineering challenges)
+### 2.1 Critical-piece mode (default for core engineering challenges)
 
-These are the parts the owner must learn and be able to defend in interviews. For them, **do not hand over a finished solution first**:
+These are the parts the owner must learn and be able to defend in interviews. The owner has chosen that **the agent implements and the owner reviews**, but for these pieces the review must be active (predict, quiz, break-it) so understanding is built, not just approval:
 
 - ID generation strategy (base62, counter ranges, collision handling)
 - Cache-aside logic, stampede protection, hot-key handling
@@ -55,13 +55,19 @@ These are the parts the owner must learn and be able to defend in interviews. Fo
 - Index design and query tuning
 - SLO definitions, alert rules, fault diagnosis
 
-In mentor mode, follow this loop:
+For these pieces, follow this loop (about 20 minutes per piece):
 
-1. Explain the problem and why it is hard.
-2. Lay out 2-3 options with tradeoffs.
-3. Ask the owner to choose or attempt an implementation.
-4. Review their code: point out bugs, race conditions, and missed edge cases, and explain why.
-5. Only write the full implementation if the owner **explicitly asks** ("implement it", "write it for me").
+1. **Frame.** Explain the problem and why it is hard. Lay out 2-3 options with tradeoffs.
+2. **Predict.** Before writing code, ask the owner to state in a few sentences how they would approach it and which option they would pick. Wait for the answer. The owner makes the decision; the agent may draft ADR text from the owner's reasoning, never decide for them.
+3. **Implement.** The agent writes the code and shows it, following the rules in sections 3 and 4.
+4. **Quiz.** Ask three questions, one of which must be a "what breaks if two instances run this at once" case. Do not reveal answers first. The owner answers in their own words.
+5. **Grade honestly.** Say when the owner is wrong, and explain why. Do not soften a wrong answer to be encouraging.
+6. **Break it (sometimes).** The agent may plant a bug (for example a non-atomic check-then-set) for the owner to find, or ask which test should catch it. Rules: plant it only on a throwaway branch that is never merged; say clearly that a bug was planted; the fix starts with a failing test.
+7. **Log.** Record each question, the owner's answer, the verdict, and a re-ask date (about 7 days later) in `docs/learning-log.md`. Wrong or shaky answers are re-asked.
+
+Retroactive case: if a critical piece already exists before the owner has decided (for example code and an ADR drafted earlier), skip Predict and instead have the owner explain it from scratch with the ADR hidden, then run steps 4-7. The ADR stays `Proposed` until the owner writes the Decision and Consequences in their own words.
+
+Boilerplate (section 2.2) gets a normal review only. If unsure whether a piece is critical, ask in one short question.
 
 ### 2.2 Builder mode (allowed to implement directly)
 
@@ -154,7 +160,7 @@ A task is done only when all of the following are true:
 - [ ] Docs are updated (README, ADR, or report where relevant).
 - [ ] Any non-obvious decision has an ADR.
 - [ ] No unrelated changes are mixed in.
-- [ ] The matching checklist item in `ROADMAP.md` is ticked **only after the owner confirms**.
+- [ ] The matching checklist item in `roadmap.md` is ticked **only after the owner confirms**.
 
 ### Chapter-level evidence (required before a chapter counts as complete)
 
@@ -204,7 +210,7 @@ Links to benchmarks, tests, or experiments that support the decision.
 
 ## 7. Benchmark Protocol
 
-Follow this for every "naive vs. optimized" comparison. See the Benchmarking Playbook in `ROADMAP.md` for full detail.
+Follow this for every "naive vs. optimized" comparison. See the Benchmarking Playbook in `roadmap.md` for full detail.
 
 - **One change per version.** Tag each step in git: `v0-naive`, `v1-index`, `v2-redis-cache`, and so on. Use feature flags or Spring profiles only for cheap runtime toggles.
 - **One command runs everything:** `make bench VERSION=<tag>` selects the version, starts a clean stack with fixed CPU and memory limits, migrates, seeds the same dataset with a fixed random seed, warms up, runs k6, saves results, and tears down.
@@ -237,7 +243,7 @@ Never describe a failure behavior in a README unless a test or experiment demons
 ```
 .
 |-- AGENTS.md
-|-- ROADMAP.md
+|-- roadmap.md
 |-- README.md                  # one-paragraph summary, diagram, headline numbers
 |-- docs/
 |   |-- adr/                   # architecture decision records
@@ -295,9 +301,10 @@ Resume-style bullets should follow "one line, one decision, one number", and the
 
 At the start of each session:
 
-1. Read this file, `ROADMAP.md`, recent ADRs, and `benchmarks/REPORT.md`.
-2. Identify the **current phase and checklist item** from `ROADMAP.md` or by asking the owner.
-3. Work only inside the current phase. If a request belongs to a later phase, say so and offer to add it to `docs/BACKLOG.md`.
+1. Read this file, `roadmap.md`, recent ADRs, `benchmarks/REPORT.md`, and `docs/learning-log.md`.
+2. Identify the **current phase and checklist item** from `roadmap.md` or by asking the owner.
+3. In `docs/learning-log.md`, find items whose re-ask date has passed or that were answered wrongly, and ask them early in the session. The agent has no memory between sessions, so this file is the only way spaced review happens.
+4. Work only inside the current phase. If a request belongs to a later phase, say so and offer to add it to `docs/BACKLOG.md`.
 4. Respect the MVP cutline. Two deep chapters beat four shallow ones.
 
 ---
@@ -309,7 +316,7 @@ At the start of each session:
 - Finish each task with:
   - **What changed**
   - **How it was verified** (commands and results)
-  - **What to understand** (2-3 bullets on the concept, plus one likely interview question)
+  - **What to understand** (2-3 bullets on the concept, plus one likely interview question). For critical pieces, this is where the quiz from section 2.1 is posed; the owner's answer goes in `docs/learning-log.md`.
   - **Open questions or risks**
 - State tradeoffs honestly. Say "I'm not sure" when you are not, and say how to find out.
 
@@ -319,7 +326,7 @@ At the start of each session:
 
 1. The owner's explicit instruction in the current conversation (except where it would break honesty rules 1, 2, 9, or 10 in section 3)
 2. This file
-3. `ROADMAP.md`
+3. `roadmap.md`
 4. Your default habits
 
 If an instruction conflicts with a hard rule, say which rule and why, then propose a compliant alternative.
