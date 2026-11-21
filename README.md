@@ -1,6 +1,6 @@
 # URL Shortener
 
-> **Phase 0 — Walking Skeleton.** One command starts the full stack; request latency is visible in Grafana.
+> **Phase 1 — URL Shortener (MVP in progress).** `POST /api/v1/links` creates a short link; `GET /{code}` redirects (302). See [docs/phase1-mvp-architecture.md](docs/phase1-mvp-architecture.md).
 
 A production-grade URL shortener built as a learning portfolio covering system design, distributed systems, and observability. Java 21 · Spring Boot 3 · PostgreSQL · Redis · Kubernetes.
 
