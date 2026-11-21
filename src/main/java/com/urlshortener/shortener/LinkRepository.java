@@ -1,6 +1,7 @@
 package com.urlshortener.shortener;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
@@ -16,4 +17,11 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
      * @return the matching link, or empty if not found
      */
     Optional<Link> findByShortCode(String shortCode);
+
+    /**
+     * Atomically takes the next value from the {@code links.id} sequence. Postgres guarantees
+     * that concurrent callers (on any app instance) never receive the same value.
+     */
+    @Query(value = "SELECT nextval('links_id_seq')", nativeQuery = true)
+    long nextId();
 }

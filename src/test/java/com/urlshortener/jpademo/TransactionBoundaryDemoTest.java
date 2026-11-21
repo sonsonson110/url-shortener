@@ -153,6 +153,10 @@ class TransactionBoundaryDemoTest {
     }
 
     public static class DemoLinkService {
+        // Link ids are now assigned by the app; this demo schema (create-drop) has no sequence.
+        private static final java.util.concurrent.atomic.AtomicLong NEXT_ID =
+                new java.util.concurrent.atomic.AtomicLong();
+
         private final LinkRepository linkRepository;
 
         public DemoLinkService(LinkRepository linkRepository) {
@@ -168,7 +172,7 @@ class TransactionBoundaryDemoTest {
             // Simulated slow external HTTP call (e.g., SafeBrowsing API or remote check)
             simulateExternalNetworkCall(800);
 
-            Link link = new Link(code, url, OffsetDateTime.now(), null);
+            Link link = new Link(NEXT_ID.incrementAndGet(), code, url, OffsetDateTime.now(), null);
             linkRepository.save(link);
         }
 
@@ -186,7 +190,7 @@ class TransactionBoundaryDemoTest {
 
         @Transactional
         public void saveLinkInShortTransaction(String code, String url) {
-            Link link = new Link(code, url, OffsetDateTime.now(), null);
+            Link link = new Link(NEXT_ID.incrementAndGet(), code, url, OffsetDateTime.now(), null);
             linkRepository.save(link);
         }
 

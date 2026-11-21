@@ -36,7 +36,7 @@ class LinkRepositoryTest {
     @Test
     void whenSaveLink_thenFindByShortCode() {
         // Arrange
-        Link link = new Link("abc123", "https://www.example.com/some/very/long/path", OffsetDateTime.now(), null);
+        Link link = new Link(1L, "abc123", "https://www.example.com/some/very/long/path", OffsetDateTime.now(), null);
 
         // Act
         linkRepository.save(link);
@@ -46,5 +46,13 @@ class LinkRepositoryTest {
         assertThat(found).isPresent();
         assertThat(found.get().getLongUrl()).isEqualTo("https://www.example.com/some/very/long/path");
         assertThat(found.get().getHitCount()).isZero();
+    }
+
+    @Test
+    void nextIdReturnsStrictlyIncreasingValues() {
+        long first = linkRepository.nextId();
+        long second = linkRepository.nextId();
+
+        assertThat(second).isGreaterThan(first);
     }
 }

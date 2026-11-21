@@ -1,13 +1,16 @@
 package com.urlshortener.shortener;
 
+import jakarta.validation.Valid;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * REST controller for URL shortener endpoints.
- *
- * <p>All business logic is delegated to {@link LinkService}.
- * Endpoints will be added in Phase 1.
+ * Management API for short links. The public redirect lives in {@link RedirectController}.
  */
 @RestController
 @RequestMapping("/api/v1/links")
@@ -19,5 +22,9 @@ public class LinkController {
         this.linkService = linkService;
     }
 
-    // TODO Phase 1: add POST /api/v1/links and GET /{shortCode} endpoints
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public LinkResponse create(@Valid @RequestBody CreateLinkRequest request) {
+        return linkService.create(request);
+    }
 }
