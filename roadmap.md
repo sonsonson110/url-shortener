@@ -85,9 +85,9 @@ You can start applying for jobs after week 18. Phases 0–2 already make a stron
 
 **Checklist:**
 
-- [ ] Schema and migrations
-- [ ] Create and redirect endpoints with tests
-- [ ] ID generation ADR (alternatives considered)
+- [x] Schema and migrations
+- [x] Create and redirect endpoints with tests
+- [x] ID generation ADR (alternatives considered)
 - [ ] Redis cache-aside with stampede protection
 - [ ] Benchmark report with before/after table
 - [ ] 3-instance deployment with collision test

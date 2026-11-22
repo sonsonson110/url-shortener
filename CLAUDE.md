@@ -24,7 +24,7 @@ Notes: `make test-unit` filters on `-Dgroups="unit"` but no tests are tagged `@T
 
 ## Architecture
 
-Single Spring Boot 3 / Java 21 app, package-by-feature under `com.urlshortener`. Currently only `shortener` (`Link` entity, `LinkRepository`, `LinkService`, `LinkController` at `/api/v1/links`); the controller has no endpoints yet (Phase 1 TODO). Planned feature packages (`ratelimit`, `jobs`) are not started.
+Single Spring Boot 3 / Java 21 app, package-by-feature under `com.urlshortener`. Currently only `shortener`: `LinkController` (`POST /api/v1/links`, 201), `RedirectController` (`GET /{code:[0-9A-Za-z]{1,12}}`, 302), `LinkService`, `Link` entity (assigned id from `links_id_seq`, implements `Persistable`), `Base62`, and `ShortenerExceptionHandler` (ProblemDetail 400/404/410). The manual API collection lives in Postman, not the repo; see the `postman-sync` skill. Planned feature packages (`ratelimit`, `jobs`) are not started.
 
 - **Schema is owned by Flyway** (`src/main/resources/db/migration`); Hibernate is `ddl-auto: validate`, `open-in-view: false`. Never edit an applied migration — add a new `V<n>__*.sql`.
 - **Config is env-driven** with local defaults in `application.yml` (`DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `REDIS_HOST/PORT`, `HIKARI_MAX_POOL_SIZE`, `SERVER_PORT`); `.env.example` lists them. Redis config exists but no Redis code is wired yet.
