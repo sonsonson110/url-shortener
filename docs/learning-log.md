@@ -33,21 +33,21 @@ Entry format:
 - Piece: `docs/adr/0002-id-generation.md`, `LinkService.create`
 - Asked: 2026-11-21
 - Question: Each instance calls `nextval` and base62-encodes the result. Why can two instances never produce the same code? `ConcurrentCreateTest` runs 32 threads in one JVM: what does it prove, and what would a multi-instance test prove that it does not?
-- Answer: unanswered
-- Verdict: pending
-- Feedback:
+- Answer: A would use postgres and the id generator. multiple instances would all ask the postgres for the next unique id. everytime postgres return an id, it also increate the id counter, atomically. (2026-11-22, written for ADR 0002)
+- Verdict: partial
+- Feedback: Correct on why the sequence is safe: nextval is atomic and Postgres holds the only counter. Missing the second half: what ConcurrentCreateTest proves (single JVM only) and what a multi-instance test would add.
 - Box: 1
-- Re-ask: after first answer
+- Re-ask: 2026-11-23
 
 ### Q2: What happens to the sequence value when the insert rolls back?
 - Piece: `LinkService.create`, `LinkRepository.nextId`
 - Asked: 2026-11-21
 - Question: If `save` fails after `nextId`, is the consumed value reused? Why does ADR 0002 call the resulting gaps "harmless", and when would they stop being harmless?
-- Answer: unanswered
-- Verdict: pending
-- Feedback:
+- Answer: if fail, the id stay unused. it's trivial, as the number would keep growing (2026-11-22, written for ADR 0002)
+- Verdict: partial
+- Feedback: Correct: nextval is not rolled back, and codes need uniqueness, not contiguity. Missing: when gaps would stop being harmless (e.g. anything relying on contiguous ids, such as counting links by max id).
 - Box: 1
-- Re-ask: after first answer
+- Re-ask: 2026-11-23
 
 ### Q3: Find the bug in counter placement
 - Piece: `LinkService.create` (`createdCounter.increment()` inside `@Transactional`)
@@ -73,11 +73,11 @@ Entry format:
 - Piece: `docs/adr/0002-id-generation.md`
 - Asked: 2026-11-21
 - Question: Sequential ids make codes enumerable. Who can exploit that, and what would you change (and what would it cost) when it stops being acceptable?
-- Answer: unanswered
-- Verdict: pending
-- Feedback:
+- Answer: very easy for others to guess people's code, as shortcode is generated from an incremental number. this would matter if someone want to mess with the server, or take ppl data (i think) (2026-11-22, written for ADR 0002)
+- Verdict: partial
+- Feedback: Correct that codes are enumerable; the real risk is harvesting private long URLs (shared docs, URLs with tokens), not server load, which is a rate-limit concern. Missing: what you would change and what it would cost.
 - Box: 1
-- Re-ask: after first answer
+- Re-ask: 2026-11-23
 
 ### HLD-05: 302 vs 301 for redirects
 - Piece: `docs/phase1-mvp-architecture.md` §5, `RedirectController.java`
@@ -125,4 +125,4 @@ None yet.
 
 ## Pending owner work
 
-- [ ] Write the Decision and Consequences sections of ADR 0002 in your own words, with the current draft hidden, then change its status from `Proposed` to `Accepted`.
+- [x] Write the Decision and Consequences sections of ADR 0002 in your own words, with the current draft hidden, then change its status from `Proposed` to `Accepted`. Done 2026-11-22.

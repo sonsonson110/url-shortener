@@ -1,6 +1,6 @@
 # 0002. Short Code Generation Strategy
 
-**Status:** Proposed (owner to confirm)  
+**Status:** Accepted  
 **Date:** 2026-11-21
 
 ## Context
@@ -26,13 +26,17 @@ Generate a random 7-character base62 code, retry on a UNIQUE violation.
 
 ## Decision
 
-Option A for the MVP. Option B is revisited in week 10 when the multi-instance deployment makes the extra round trip measurable.
+Option A for the MVP.
+
+A uses Postgres and its id generator (the `links_id_seq` sequence). Multiple instances all ask Postgres for the next unique id. Every time Postgres returns an id, it also increases the id counter, atomically.
+
+B can save a DB round trip to fetch the record id for every link creation, but when an instance crashes, its assigned block is unusable for the entire system. C has the advantage of being random and unguessable, but as the links grow, the chance that a random id collides gets higher, which means more retries and DB hits.
 
 ## Consequences
 
-- `Link` gets an assigned id (no `IDENTITY`) and implements `Persistable` to avoid an extra SELECT on save.
-- Codes are guessable; revisit if private links or accounts are ever added.
-- Sequence gaps are expected and harmless.
+- `LinkService` first calls the DB to get the next id, then base62-encodes it into the short code, then makes a second DB round trip to save the record. To do this, the `Link` entity implements `Persistable` with an `isNew` flag that defaults to true on creation, so Spring Data skips the check for id existence when we provide the id on save. After saving, `isNew` is set to false.
+- It is very easy for others to guess people's codes, because the short code is generated from an incremental number. This would matter if someone wants to mess with the server or take people's data.
+- If an insert fails, the id stays unused. This is trivial, as the number keeps growing.
 
 ## Evidence
 
