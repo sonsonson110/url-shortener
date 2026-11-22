@@ -53,11 +53,11 @@ Entry format:
 - Piece: `LinkService.create` (`createdCounter.increment()` inside `@Transactional`)
 - Asked: 2026-11-21
 - Question: The counter increments before the transaction commits. What goes wrong if the commit fails? What would you change, and which test would catch it?
-- Answer: unanswered
-- Verdict: pending
-- Feedback:
+- Answer: Counter still increments if commit fails; remove @Transactional from create, call a separate transactional method, increment after it completes
+- Verdict: partial
+- Feedback: Self-invocation bypasses the proxy; use another bean or TransactionTemplate; no test named.
 - Box: 1
-- Re-ask: after first answer
+- Re-ask: 2026-11-23
 
 ### Q4: Expiry boundary
 - Piece: `LinkService.resolve`
@@ -78,6 +78,46 @@ Entry format:
 - Feedback:
 - Box: 1
 - Re-ask: after first answer
+
+### HLD-05: 302 vs 301 for redirects
+- Piece: `docs/phase1-mvp-architecture.md` §5, `RedirectController.java`
+- Asked: 2026-11-22
+- Question: see question bank
+- Answer: 302 isn't cached by the browser, so every click hits the server for expiry checks and analytics
+- Verdict: correct
+- Feedback: Correct; also say 301 is cached, so expired or edited links keep redirecting.
+- Box: 2
+- Re-ask: 2026-11-25
+
+### HLD-07: What breaks first at 100:1 reads without a cache
+- Piece: `docs/phase1-mvp-architecture.md` §7, `roadmap.md` §6
+- Asked: 2026-11-22
+- Question: see question bank
+- Answer: Database breaks first under load; roadmap plans caching for the hot path
+- Verdict: partial
+- Feedback: Missing connection-pool saturation, Redis cache-aside, stampede protection, k6 benchmarks.
+- Box: 1
+- Re-ask: 2026-11-23
+
+### CODE-04: Why a regex on the redirect mapping
+- Piece: `RedirectController.java`
+- Asked: 2026-11-22
+- Question: see question bank
+- Answer: Code is base62 so only [0-9A-Za-z]; {1,12} enforces at least one character and a maximum length
+- Verdict: partial
+- Feedback: Missed main reason: avoid shadowing root paths like /actuator, /api, favicon.ico.
+- Box: 1
+- Re-ask: 2026-11-23
+
+### OBS-04: Scraped metric names
+- Piece: `LinkService.java`
+- Asked: 2026-11-22
+- Question: see question bank
+- Answer: Said a counter, rate per minute; didn't know the scraped metric names
+- Verdict: wrong
+- Feedback: Names are links_created_total and links_redirects_total{outcome}; dots become underscores, _total added.
+- Box: 1
+- Re-ask: 2026-11-23
 
 ## Retired
 
