@@ -115,7 +115,7 @@ Entry format:
 - Question: see question bank
 - Answer: Said a counter, rate per minute; didn't know the scraped metric names
 - Verdict: wrong
-- Feedback: Names are links_created_total and links_redirects_total{outcome}; dots become underscores, _total added.
+- Feedback: Names are links_total and links_redirects_total{outcome}; dots become underscores, _total added. Note: the Prometheus client strips the reserved _created suffix, so links.created scrapes as links_total, not links_created_total (the first feedback and the bank had this wrong; corrected 2026-11-22 after checking /actuator/prometheus).
 - Box: 1
 - Re-ask: 2026-11-23
 

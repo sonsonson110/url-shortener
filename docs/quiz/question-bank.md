@@ -289,7 +289,7 @@ The learning-log questions Q1–Q5 (`docs/learning-log.md`) are part of the pool
 ### OBS-04 · predict · medium
 - Source: `LinkService.java`
 - Q: The code registers `Counter.builder("links.created")` and `meterRegistry.counter("links.redirects", "outcome", …)`. What metric names does Prometheus scrape?
-- Grading points: `links_created_total` and `links_redirects_total{outcome="…"}`. Micrometer converts dots to underscores and adds `_total` to counters, plus the common tag `application="url-shortener"`.
+- Grading points: `links_total` (not `links_created_total`) and `links_redirects_total{outcome="…"}`. Micrometer converts dots to underscores and adds `_total` to counters, plus the common tag `application="url-shortener"`. The Prometheus client 1.x reserves the `_created` suffix and strips it, so `links.created` is exposed as `links_total`. Verified against `/actuator/prometheus` on 2026-11-22.
 
 ### OBS-05 · design · hard
 - Source: `LinkService.resolve`

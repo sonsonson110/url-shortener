@@ -104,7 +104,7 @@ Worked example: `125 = 2 * 62 + 1`, so the digits are `2` and `1`, giving `"21"`
 Metrics:
 
 - `http_server_requests` (automatic): rate, errors and duration per route.
-- `links_created_total`: links created.
+- `links_total`: links created (the counter is registered as `links.created`; the Prometheus client strips the reserved `_created` suffix).
 - `links_redirects_total{outcome="hit|not_found|expired"}`: redirect results.
 
 ## 7. Self-check questions
