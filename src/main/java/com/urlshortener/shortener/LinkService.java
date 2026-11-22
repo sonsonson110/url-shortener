@@ -5,6 +5,8 @@ import io.micrometer.core.instrument.MeterRegistry;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -44,7 +46,14 @@ public class LinkService {
         Link link = new Link(id, shortCode, longUrl, OffsetDateTime.now(ZoneOffset.UTC), request.expiresAt());
         linkRepository.save(link);
 
-        createdCounter.increment();
+        // Count only after the INSERT is durable: with assigned ids, save() merely queues the
+        // INSERT and constraint violations surface at commit, after this method has returned.
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                createdCounter.increment();
+            }
+        });
         return new LinkResponse(shortCode, shortUrl(shortCode), longUrl, link.getExpiresAt());
     }
 
