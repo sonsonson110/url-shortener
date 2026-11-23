@@ -51,10 +51,10 @@ Entry format:
 - Box: 1
 - Re-ask: 2026-11-23
 
-### Q3: Find the bug in counter placement
-- Piece: `LinkService.create` (`createdCounter.increment()` inside `@Transactional`)
+### Q3: Why the created counter increments in afterCommit
+- Piece: `LinkService.create` (`TransactionSynchronization.afterCommit`), `LinkServiceCounterTest`
 - Asked: 2026-11-21
-- Question: The counter increments before the transaction commits. What goes wrong if the commit fails? What would you change, and which test would catch it?
+- Question: Why does `create` increment the counter in `afterCommit` instead of inline? What failure does `LinkServiceCounterTest` force, and what does it assert? (Reworded 2026-11-23: the old version asked to find a bug the source had already fixed.)
 - Answer: Counter still increments when the transaction fails. Use TransactionSynchronization so it increments only after save succeeds. A test for duplicate id would catch it.
 - Verdict: partial
 - Feedback: STALE: source already uses afterCommit. Fix right; test vague. Name LinkServiceCounterTest: force commit-time failure, assert counter unchanged.
