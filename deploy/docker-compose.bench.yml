@@ -1,0 +1,74 @@
+# Benchmark stack. Separate compose project from deploy/docker-compose.yml so it never touches
+# dev data. Driven by benchmarks/scripts/run-bench.sh (needs BENCH_OUT, BENCH_UID, BENCH_GID).
+#
+# Fixed resource limits (same for every version, see AGENTS.md section 7):
+#   postgres 2 CPU / 2 GB, app 2 CPU / 1 GB, k6 2 CPU / 2 GB. Host has 8 cores.
+name: urlshortener-bench
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: urlshortener
+      POSTGRES_USER: urlshortener
+      POSTGRES_PASSWORD: urlshortener
+    # Explicit so the config is part of the experiment record, not an image default.
+    command:
+      - postgres
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - effective_cache_size=1536MB
+    cpus: 2
+    mem_limit: 2g
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U urlshortener -d urlshortener"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: url-shortener:bench
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/urlshortener
+      DB_USERNAME: urlshortener
+      DB_PASSWORD: urlshortener
+      HIKARI_MAX_POOL_SIZE: "10"
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=50"
+      # DEBUG logging per request would be measured instead of the app.
+      LOGGING_LEVEL_COM_URLSHORTENER: INFO
+      # v0 has no Redis code; without a Redis container the health indicator would report DOWN.
+      MANAGEMENT_HEALTH_REDIS_ENABLED: "false"
+    ports:
+      - "18080:8080"   # smoke tests from the host; k6 uses the internal network
+    cpus: 2
+    mem_limit: 1g
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+      start_period: 20s
+
+  k6:
+    image: grafana/k6:0.54.0
+    profiles: ["load"]
+    user: "${BENCH_UID:-1000}:${BENCH_GID:-1000}"
+    environment:
+      BASE_URL: http://app:8080
+    cpus: 2
+    mem_limit: 2g
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - ../benchmarks/k6:/scripts:ro
+      - ${BENCH_OUT:?set by run-bench.sh}:/results

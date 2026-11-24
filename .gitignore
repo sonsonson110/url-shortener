@@ -21,3 +21,6 @@ Thumbs.db
 
 # Docker local overrides
 docker-compose.override.yml
+
+# Benchmark smoke runs (pipeline checks, not results)
+benchmarks/results/smoke/

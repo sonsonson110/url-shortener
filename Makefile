@@ -71,16 +71,12 @@ db-shell: ## Open psql shell in the running Postgres container
 
 # ─── Benchmarking ──────────────────────────────────────────────────────────────
 .PHONY: bench
-bench: ## Run benchmark for a given VERSION (e.g. make bench VERSION=v0-naive)
-	@echo "Running benchmark for $(VERSION) ..."
-	@mkdir -p benchmarks/results/$(VERSION)
-	@if ! command -v k6 &> /dev/null; then \
-	  echo "ERROR: k6 not found. Install from https://k6.io/docs/getting-started/installation/"; \
-	  exit 1; \
-	fi
-	k6 run \
-	  --out json=benchmarks/results/$(VERSION)/$(TIMESTAMP).json \
-	  benchmarks/k6/scenarios/redirect-read-heavy.js
+bench: ## Full benchmark run for VERSION (clean stack, seed, warm-up, k6, save, tear down)
+	VERSION=$(VERSION) benchmarks/scripts/run-bench.sh
+
+.PHONY: bench-saturation
+bench-saturation: ## Ramp load to find the saturation point (RATE = peak req/s of the ramp)
+	VERSION=$(VERSION) MODE=saturation RATE=$${RATE:-3000} benchmarks/scripts/run-bench.sh
 
 # ─── Utilities ─────────────────────────────────────────────────────────────────
 .PHONY: format
