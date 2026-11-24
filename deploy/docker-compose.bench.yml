@@ -23,6 +23,8 @@ services:
       - effective_cache_size=1536MB
     cpus: 2
     mem_limit: 2g
+    # Docker's default /dev/shm is 64 MB; parallel workers in the 10M-row seed/VACUUM need more.
+    shm_size: 1g
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U urlshortener -d urlshortener"]
       interval: 3s
