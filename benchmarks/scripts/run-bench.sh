@@ -61,7 +61,7 @@ SEED_SECONDS=$(( $(date +%s) - SEED_START ))
   echo "links_rows=$("${PSQL[@]}" -Atc 'select count(*) from links')"
   echo "links_size=$("${PSQL[@]}" -Atc "select pg_size_pretty(pg_total_relation_size('links'))")"
 } > "$BENCH_OUT/env.txt"
-"${COMPOSE[@]}" config > "$BENCH_OUT/compose.resolved.yml"
+"${COMPOSE[@]}" --profile load config > "$BENCH_OUT/compose.resolved.yml"
 
 run_k6() { "${COMPOSE[@]}" --profile load run --rm -T "${K6_ENV[@]}" k6 "$@"; }
 
