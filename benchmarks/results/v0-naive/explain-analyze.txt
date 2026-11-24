@@ -1,0 +1,69 @@
+# EXPLAIN ANALYZE of the redirect lookup on the v0-naive bench database
+# commit: 229d7ab63d76c9f17bd8027d0ad96855c7d1cd82  date: 2026-11-24T15:11:11+07:00
+# PostgreSQL 16.16 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+# fresh bench stack, 10M rows seeded with benchmarks/scripts/seed.sql (seed.sql ends with VACUUM ANALYZE); links id 7654321 -> short_code w7eN
+
+## indexes and sizes
+links_pkey : CREATE UNIQUE INDEX links_pkey ON public.links USING btree (id)
+uq_links_short_code : CREATE UNIQUE INDEX uq_links_short_code ON public.links USING btree (short_code)
+heap=887 MB idx_short_code=363 MB idx_pkey=214 MB
+
+## 1. index lookup, existing code, first run
+                                                           QUERY PLAN                                                            
+---------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using uq_links_short_code on links l1_0  (cost=0.43..8.45 rows=1 width=65) (actual time=0.028..0.029 rows=1 loops=1)
+   Index Cond: ((short_code)::text = 'w7eN'::text)
+   Buffers: shared hit=4
+ Planning:
+   Buffers: shared hit=97
+ Planning Time: 0.451 ms
+ Execution Time: 0.060 ms
+(7 rows)
+
+## 1b. same, second run
+                                                           QUERY PLAN                                                            
+---------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using uq_links_short_code on links l1_0  (cost=0.43..8.45 rows=1 width=65) (actual time=0.034..0.035 rows=1 loops=1)
+   Index Cond: ((short_code)::text = 'w7eN'::text)
+   Buffers: shared hit=4
+ Planning:
+   Buffers: shared hit=97
+ Planning Time: 0.506 ms
+ Execution Time: 0.066 ms
+(7 rows)
+
+## 2. same query with index/bitmap/index-only scans disabled (what a missing index would cost)
+                                                         QUERY PLAN                                                          
+-----------------------------------------------------------------------------------------------------------------------------
+ Gather  (cost=1000.00..166615.10 rows=1 width=65) (actual time=389.778..515.903 rows=1 loops=1)
+   Workers Planned: 2
+   Workers Launched: 2
+   Buffers: shared hit=39475 read=74056
+   ->  Parallel Seq Scan on links l1_0  (cost=0.00..165615.00 rows=1 width=65) (actual time=450.615..489.121 rows=0 loops=3)
+         Filter: ((short_code)::text = 'w7eN'::text)
+         Rows Removed by Filter: 3333333
+         Buffers: shared hit=39475 read=74056
+ Planning:
+   Buffers: shared hit=97
+ Planning Time: 0.468 ms
+ JIT:
+   Functions: 12
+   Options: Inlining false, Optimization false, Expressions true, Deforming true
+   Timing: Generation 1.399 ms, Inlining 0.000 ms, Optimization 0.833 ms, Emission 14.436 ms, Total 16.668 ms
+ Execution Time: 532.358 ms
+(16 rows)
+
+## 3. miss (404 path)
+                                                           QUERY PLAN                                                            
+---------------------------------------------------------------------------------------------------------------------------------
+ Index Scan using uq_links_short_code on links l1_0  (cost=0.43..8.45 rows=1 width=65) (actual time=0.024..0.024 rows=0 loops=1)
+   Index Cond: ((short_code)::text = 'zzzzzzzz'::text)
+   Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=97
+ Planning Time: 0.470 ms
+ Execution Time: 0.056 ms
+(7 rows)
+
+## 4. planner stats for short_code (attname|n_distinct|correlation)
+short_code|-1|0.5498896

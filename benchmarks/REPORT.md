@@ -60,6 +60,33 @@ values that do not agree with the request latencies (an apparent ~18 ms average 
 but a hit still costs the app the HTTP handling, so the expected gain is smaller than the database
 share suggests. To be measured in v2, not assumed.
 
+### Query plan analysis (redirect lookup)
+
+`EXPLAIN (ANALYZE, BUFFERS)` of the app's redirect query
+(`select … from links where short_code = ?`) on a freshly seeded 10M-row bench database. Raw output:
+`benchmarks/results/v0-naive/explain-analyze.txt` (one hand-run session, not part of `make bench`).
+
+| Case | Plan | Pages touched | Execution time |
+|---|---|---|---|
+| Existing code (`w7eN`) | Index Scan on `uq_links_short_code` | 4 (hit) | 0.060 ms (second run 0.066 ms) |
+| Missing code (404 path) | Index Scan on `uq_links_short_code` | 3 (hit) | 0.056 ms |
+| Existing code, index/bitmap scans disabled | Parallel Seq Scan (2 workers + leader) | 113,531 (39,475 hit + 74,056 read) | 532 ms |
+
+- `short_code` is already covered by a unique B-tree index (`uq_links_short_code`, 363 MB; heap 887 MB,
+  primary key index 214 MB), so there is no missing index to add. The planner picks it on its own: the seed
+  ends with `VACUUM ANALYZE`, and `pg_stats` reports `n_distinct = -1` (all unique) for the column.
+- An indexed lookup reads 4 pages: 3 B-tree levels plus 1 table page (a miss reads only the 3 index
+  pages). Without the index, Postgres reads every page of the table (113,531 × 8 KB ≈ 887 MB) and
+  discards 3.33M rows per worker.
+- The sequential scan was forced with `SET enable_indexscan/bitmapscan/indexonlyscan = off` in one session
+  to show the cost of a missing index; it is not something the application does. Timings vary run to run
+  (an earlier hand run gave 0.088 ms and 470 ms), so read the ratio (about four orders of magnitude), not the digits.
+- Planning time (about 0.45–0.5 ms) is larger than execution time here. `pg_stat_statements` reports
+  execution only, which is why the baseline shows about 0.05 ms per query. Whether the app re-plans the
+  statement on every call or reuses a prepared plan was not checked.
+- Conclusion: the database lookup is not the cost in v0. A separate "add an index" version would change
+  nothing, and the next candidate optimization is the cache (v2).
+
 ### Method and environment
 
 - Host: Intel i7-10510U (4 cores / 8 threads), 23 GB RAM, Linux 7.0.0-43, Docker 29.9.2, Compose v2.3.3.
