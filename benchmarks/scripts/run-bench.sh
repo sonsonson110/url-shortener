@@ -2,7 +2,7 @@
 # One command per run: clean stack -> migrate -> seed -> warm up -> measure -> save -> tear down.
 # Usage: VERSION=v0-naive benchmarks/scripts/run-bench.sh      (normally via: make bench VERSION=...)
 # Env:   MODE=measure|saturation  RATE=500  SEED_ROWS=10000000  WARMUP_DURATION=2m  DURATION=5m
-#        BUCKET=10 (timeseries.csv bucket, seconds)  KEEP_RAW=1 (keep raw k6 json.gz)
+#        WARMUP_RATE=<RATE, or 1000 in saturation>  BUCKET=10 (timeseries.csv bucket, seconds)  KEEP_RAW=1 (keep raw k6 json.gz)
 #
 # The app image is built from the CURRENT working tree. Check out the version's tag/commit first;
 # the commit and dirty flag are recorded in env.txt so a result can be traced to its code.
@@ -13,6 +13,8 @@ MODE=${MODE:-measure}
 RATE=${RATE:-500}
 SEED_ROWS=${SEED_ROWS:-10000000}
 WARMUP_DURATION=${WARMUP_DURATION:-2m}
+# Saturation's RATE is the ramp peak, far above a safe warm-up rate, so warm up at a fixed low rate.
+if [[ "$MODE" == "saturation" ]]; then WARMUP_RATE=${WARMUP_RATE:-1000}; else WARMUP_RATE=${WARMUP_RATE:-$RATE}; fi
 DURATION=${DURATION:-5m}
 export MODE RATE SEED_ROWS DURATION WARMUP_DURATION
 
@@ -48,7 +50,7 @@ SEED_SECONDS=$(( $(date +%s) - SEED_START ))
 
 {
   echo "version=$VERSION"
-  echo "mode=$MODE rate=$RATE seed_rows=$SEED_ROWS warmup=$WARMUP_DURATION duration=$DURATION"
+  echo "mode=$MODE rate=$RATE seed_rows=$SEED_ROWS warmup=$WARMUP_DURATION warmup_rate=$WARMUP_RATE duration=$DURATION"
   echo "seed_seconds=$SEED_SECONDS (setup time, not a benchmark result)"
   echo "git_commit=$(git -C "$ROOT" rev-parse HEAD)"
   echo "git_dirty=$([[ -n "$(git -C "$ROOT" status --porcelain -- . ':!benchmarks/results')" ]] && echo yes || echo no)"
@@ -65,10 +67,8 @@ SEED_SECONDS=$(( $(date +%s) - SEED_START ))
 
 run_k6() { "${COMPOSE[@]}" --profile load run --rm -T "${K6_ENV[@]}" k6 "$@"; }
 
-if [[ "$MODE" != "saturation" ]]; then
-  echo "== warm-up ($WARMUP_DURATION, results discarded)"
-  MODE=warmup run_k6 run /scripts/scenarios/redirect-read-heavy.js > "$BENCH_OUT/warmup.log" 2>&1 || true
-fi
+echo "== warm-up ($WARMUP_DURATION at $WARMUP_RATE req/s, results discarded)"
+MODE=warmup RATE=$WARMUP_RATE run_k6 run /scripts/scenarios/redirect-read-heavy.js > "$BENCH_OUT/warmup.log" 2>&1 || true
 
 "${PSQL[@]}" -qc "SELECT pg_stat_statements_reset()" > /dev/null
 
