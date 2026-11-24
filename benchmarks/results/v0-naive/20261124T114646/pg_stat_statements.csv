@@ -1,0 +1,5 @@
+calls,total_ms,mean_ms,rows,query
+899348,44882.6,0.050,899348,"select l1_0.id,l1_0.created_at,l1_0.expires_at,l1_0.hit_count,l1_0.long_url,l1_0.short_code from links l1_0 where l1_0.s"
+9000,330.1,0.037,9000,"insert into links (created_at,expires_at,hit_count,long_url,short_code,id) values ($1,$2,$3,$4,$5,$6)"
+9000,78.9,0.009,9000,SELECT nextval('links_id_seq')
+1,0.1,0.081,1,SELECT pg_stat_statements_reset()

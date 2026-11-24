@@ -1,0 +1,630 @@
+# HELP application_ready_time_seconds Time taken for the application to be ready to service requests
+# TYPE application_ready_time_seconds gauge
+application_ready_time_seconds{application="url-shortener",main_application_class="com.urlshortener.UrlShortenerApplication"} 10.352
+# HELP application_started_time_seconds Time taken to start the application
+# TYPE application_started_time_seconds gauge
+application_started_time_seconds{application="url-shortener",main_application_class="com.urlshortener.UrlShortenerApplication"} 10.267
+# HELP disk_free_bytes Usable space for path
+# TYPE disk_free_bytes gauge
+disk_free_bytes{application="url-shortener",path="/app/."} 5.4396235776E10
+# HELP disk_total_bytes Total space for path
+# TYPE disk_total_bytes gauge
+disk_total_bytes{application="url-shortener",path="/app/."} 2.41411448832E11
+# HELP executor_active_threads The approximate number of threads that are actively executing tasks
+# TYPE executor_active_threads gauge
+executor_active_threads{application="url-shortener",name="applicationTaskExecutor"} 0.0
+# HELP executor_completed_tasks_total The approximate total number of tasks that have completed execution
+# TYPE executor_completed_tasks_total counter
+executor_completed_tasks_total{application="url-shortener",name="applicationTaskExecutor"} 0.0
+# HELP executor_pool_core_threads The core number of threads for the pool
+# TYPE executor_pool_core_threads gauge
+executor_pool_core_threads{application="url-shortener",name="applicationTaskExecutor"} 8.0
+# HELP executor_pool_max_threads The maximum allowed number of threads in the pool
+# TYPE executor_pool_max_threads gauge
+executor_pool_max_threads{application="url-shortener",name="applicationTaskExecutor"} 2.147483647E9
+# HELP executor_pool_size_threads The current number of threads in the pool
+# TYPE executor_pool_size_threads gauge
+executor_pool_size_threads{application="url-shortener",name="applicationTaskExecutor"} 0.0
+# HELP executor_queue_remaining_tasks The number of additional elements that this queue can ideally accept without blocking
+# TYPE executor_queue_remaining_tasks gauge
+executor_queue_remaining_tasks{application="url-shortener",name="applicationTaskExecutor"} 2.147483647E9
+# HELP executor_queued_tasks The approximate number of tasks that are queued for execution
+# TYPE executor_queued_tasks gauge
+executor_queued_tasks{application="url-shortener",name="applicationTaskExecutor"} 0.0
+# HELP hikaricp_connections Total connections
+# TYPE hikaricp_connections gauge
+hikaricp_connections{application="url-shortener",pool="HikariPool-UrlShortener"} 10.0
+# HELP hikaricp_connections_acquire_seconds Connection acquire time
+# TYPE hikaricp_connections_acquire_seconds summary
+hikaricp_connections_acquire_seconds_count{application="url-shortener",pool="HikariPool-UrlShortener"} 1106510
+hikaricp_connections_acquire_seconds_sum{application="url-shortener",pool="HikariPool-UrlShortener"} 19965.117032372
+# HELP hikaricp_connections_acquire_seconds_max Connection acquire time
+# TYPE hikaricp_connections_acquire_seconds_max gauge
+hikaricp_connections_acquire_seconds_max{application="url-shortener",pool="HikariPool-UrlShortener"} 0.029366288
+# HELP hikaricp_connections_active Active connections
+# TYPE hikaricp_connections_active gauge
+hikaricp_connections_active{application="url-shortener",pool="HikariPool-UrlShortener"} 0.0
+# HELP hikaricp_connections_creation_seconds Connection creation time
+# TYPE hikaricp_connections_creation_seconds summary
+hikaricp_connections_creation_seconds_count{application="url-shortener",pool="HikariPool-UrlShortener"} 7
+hikaricp_connections_creation_seconds_sum{application="url-shortener",pool="HikariPool-UrlShortener"} 0.406
+# HELP hikaricp_connections_creation_seconds_max Connection creation time
+# TYPE hikaricp_connections_creation_seconds_max gauge
+hikaricp_connections_creation_seconds_max{application="url-shortener",pool="HikariPool-UrlShortener"} 0.0
+# HELP hikaricp_connections_idle Idle connections
+# TYPE hikaricp_connections_idle gauge
+hikaricp_connections_idle{application="url-shortener",pool="HikariPool-UrlShortener"} 10.0
+# HELP hikaricp_connections_max Max connections
+# TYPE hikaricp_connections_max gauge
+hikaricp_connections_max{application="url-shortener",pool="HikariPool-UrlShortener"} 10.0
+# HELP hikaricp_connections_min Min connections
+# TYPE hikaricp_connections_min gauge
+hikaricp_connections_min{application="url-shortener",pool="HikariPool-UrlShortener"} 2.0
+# HELP hikaricp_connections_pending Pending threads
+# TYPE hikaricp_connections_pending gauge
+hikaricp_connections_pending{application="url-shortener",pool="HikariPool-UrlShortener"} 0.0
+# HELP hikaricp_connections_timeout_total Connection timeout total count
+# TYPE hikaricp_connections_timeout_total counter
+hikaricp_connections_timeout_total{application="url-shortener",pool="HikariPool-UrlShortener"} 4.0
+# HELP hikaricp_connections_usage_seconds Connection usage time
+# TYPE hikaricp_connections_usage_seconds summary
+hikaricp_connections_usage_seconds_count{application="url-shortener",pool="HikariPool-UrlShortener"} 1106506
+hikaricp_connections_usage_seconds_sum{application="url-shortener",pool="HikariPool-UrlShortener"} 954.968
+# HELP hikaricp_connections_usage_seconds_max Connection usage time
+# TYPE hikaricp_connections_usage_seconds_max gauge
+hikaricp_connections_usage_seconds_max{application="url-shortener",pool="HikariPool-UrlShortener"} 0.127
+# HELP http_server_requests_active_seconds  
+# TYPE http_server_requests_active_seconds histogram
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="120.0"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="137.438953471"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="160.345445716"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="183.251937961"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="206.158430206"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="229.064922451"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="251.971414696"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="274.877906944"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="366.503875925"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="458.129844906"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="549.755813887"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="641.381782868"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="733.007751849"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="824.63372083"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="916.259689811"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="1007.885658792"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="1099.511627776"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="1466.015503701"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="1832.519379626"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="2199.023255551"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="2565.527131476"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="2932.031007401"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="3298.534883326"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="3665.038759251"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="4031.542635176"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="4398.046511104"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="5864.062014805"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="7200.0"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN",le="+Inf"} 1
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="120.0"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="137.438953471"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="160.345445716"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="183.251937961"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="206.158430206"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="229.064922451"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="251.971414696"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="274.877906944"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="366.503875925"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="458.129844906"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="549.755813887"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="641.381782868"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="733.007751849"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="824.63372083"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="916.259689811"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="1007.885658792"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="1099.511627776"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="1466.015503701"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="1832.519379626"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="2199.023255551"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="2565.527131476"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="2932.031007401"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="3298.534883326"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="3665.038759251"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="4031.542635176"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="4398.046511104"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="5864.062014805"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="7200.0"} 0
+http_server_requests_active_seconds_bucket{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN",le="+Inf"} 0
+# HELP http_server_requests_active_seconds_gcount  
+# TYPE http_server_requests_active_seconds_gcount gauge
+http_server_requests_active_seconds_gcount{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN"} 1
+http_server_requests_active_seconds_gcount{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN"} 0
+# HELP http_server_requests_active_seconds_gsum  
+# TYPE http_server_requests_active_seconds_gsum gauge
+http_server_requests_active_seconds_gsum{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN"} 0.020179394
+http_server_requests_active_seconds_gsum{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN"} 0.0
+# HELP http_server_requests_active_seconds_max  
+# TYPE http_server_requests_active_seconds_max gauge
+http_server_requests_active_seconds_max{application="url-shortener",exception="none",method="GET",outcome="SUCCESS",status="200",uri="UNKNOWN"} 0.020195741
+http_server_requests_active_seconds_max{application="url-shortener",exception="none",method="POST",outcome="SUCCESS",status="200",uri="UNKNOWN"} 0.0
+# HELP http_server_requests_seconds  
+# TYPE http_server_requests_seconds histogram
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.001"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.001048576"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.001398101"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.001747626"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.002097151"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.002446676"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.002796201"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.003145726"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.003495251"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.003844776"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.004194304"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.005592405"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.006990506"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.008388607"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.009786708"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.011184809"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.01258291"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.013981011"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.015379112"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.016777216"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.022369621"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.027962026"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.033554431"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.039146836"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.044739241"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.050331646"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.055924051"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.061516456"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.067108864"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.089478485"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.111848106"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.134217727"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.156587348"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.178956969"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.20132659"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.223696211"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.246065832"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.268435456"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.357913941"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.447392426"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.536870911"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.626349396"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.715827881"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.805306366"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.894784851"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.984263336"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="1.073741824"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="1.431655765"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="1.789569706"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="2.147483647"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="2.505397588"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="2.863311529"} 0
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="3.22122547"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="3.579139411"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="3.937053352"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="4.294967296"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="5.726623061"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="7.158278826"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="8.589934591"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="10.021590356"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="11.453246121"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="12.884901886"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="14.316557651"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="15.748213416"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="17.179869184"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="22.906492245"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="28.633115306"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="30.0"} 4
+http_server_requests_seconds_bucket{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}",le="+Inf"} 4
+http_server_requests_seconds_count{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}"} 4
+http_server_requests_seconds_sum{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}"} 12.105197
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.001"} 923194
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.001048576"} 925685
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.001398101"} 940434
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.001747626"} 951800
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.002097151"} 961177
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.002446676"} 968818
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.002796201"} 975190
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.003145726"} 980556
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.003495251"} 985325
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.003844776"} 989622
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.004194304"} 993032
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.005592405"} 1001620
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.006990506"} 1005567
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.008388607"} 1007563
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.009786708"} 1008911
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.011184809"} 1009971
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.01258291"} 1010849
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.013981011"} 1011451
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.015379112"} 1011943
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.016777216"} 1012253
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.022369621"} 1013121
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.027962026"} 1013980
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.033554431"} 1014765
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.039146836"} 1015312
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.044739241"} 1015521
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.050331646"} 1015681
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.055924051"} 1016129
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.061516456"} 1017417
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.067108864"} 1019735
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.089478485"} 1024716
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.111848106"} 1033310
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.134217727"} 1039721
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.156587348"} 1040354
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.178956969"} 1044292
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.20132659"} 1053632
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.223696211"} 1061011
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.246065832"} 1062595
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.268435456"} 1063182
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.357913941"} 1076678
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.447392426"} 1084514
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.536870911"} 1088610
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.626349396"} 1090291
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.715827881"} 1091316
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.805306366"} 1091816
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.894784851"} 1092144
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="0.984263336"} 1092590
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="1.073741824"} 1092949
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="1.431655765"} 1093342
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="1.789569706"} 1093548
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="2.147483647"} 1093626
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="2.505397588"} 1093634
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="2.863311529"} 1093639
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="3.22122547"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="3.579139411"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="3.937053352"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="4.294967296"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="5.726623061"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="7.158278826"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="8.589934591"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="10.021590356"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="11.453246121"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="12.884901886"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="14.316557651"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="15.748213416"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="17.179869184"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="22.906492245"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="28.633115306"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="30.0"} 1093640
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}",le="+Inf"} 1093640
+http_server_requests_seconds_count{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}"} 1093640
+http_server_requests_seconds_sum{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}"} 20898.176789595
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.001"} 72
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.001048576"} 77
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.001398101"} 97
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.001747626"} 102
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.002097151"} 115
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.002446676"} 126
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.002796201"} 137
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.003145726"} 142
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.003495251"} 145
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.003844776"} 146
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.004194304"} 147
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.005592405"} 148
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.006990506"} 148
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.008388607"} 149
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.009786708"} 149
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.011184809"} 149
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.01258291"} 149
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.013981011"} 149
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.015379112"} 149
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.016777216"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.022369621"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.027962026"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.033554431"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.039146836"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.044739241"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.050331646"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.055924051"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.061516456"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.067108864"} 150
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.089478485"} 151
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.111848106"} 152
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.134217727"} 153
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.156587348"} 153
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.178956969"} 154
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.20132659"} 155
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.223696211"} 155
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.246065832"} 155
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.268435456"} 155
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.357913941"} 159
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.447392426"} 163
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.536870911"} 166
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.626349396"} 168
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.715827881"} 168
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.805306366"} 168
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.894784851"} 168
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="0.984263336"} 168
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="1.073741824"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="1.431655765"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="1.789569706"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="2.147483647"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="2.505397588"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="2.863311529"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="3.22122547"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="3.579139411"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="3.937053352"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="4.294967296"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="5.726623061"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="7.158278826"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="8.589934591"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="10.021590356"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="11.453246121"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="12.884901886"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="14.316557651"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="15.748213416"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="17.179869184"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="22.906492245"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="28.633115306"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="30.0"} 169
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health",le="+Inf"} 169
+http_server_requests_seconds_count{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health"} 169
+http_server_requests_seconds_sum{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health"} 7.397896814
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.001"} 561
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.001048576"} 1637
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.001398101"} 7325
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.001747626"} 8785
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.002097151"} 9033
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.002446676"} 9170
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.002796201"} 9306
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.003145726"} 9424
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.003495251"} 9523
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.003844776"} 9617
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.004194304"} 9732
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.005592405"} 10038
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.006990506"} 10250
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.008388607"} 10346
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.009786708"} 10425
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.011184809"} 10477
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.01258291"} 10518
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.013981011"} 10552
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.015379112"} 10576
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.016777216"} 10598
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.022369621"} 10631
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.027962026"} 10643
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.033554431"} 10652
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.039146836"} 10655
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.044739241"} 10658
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.050331646"} 10661
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.055924051"} 10666
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.061516456"} 10675
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.067108864"} 10706
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.089478485"} 10887
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.111848106"} 11024
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.134217727"} 11157
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.156587348"} 11171
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.178956969"} 11226
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.20132659"} 11418
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.223696211"} 11588
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.246065832"} 11615
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.268435456"} 11624
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.357913941"} 11946
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.447392426"} 12166
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.536870911"} 12317
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.626349396"} 12370
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.715827881"} 12405
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.805306366"} 12424
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.894784851"} 12441
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="0.984263336"} 12468
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="1.073741824"} 12492
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="1.431655765"} 12517
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="1.789569706"} 12524
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="2.147483647"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="2.505397588"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="2.863311529"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="3.22122547"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="3.579139411"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="3.937053352"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="4.294967296"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="5.726623061"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="7.158278826"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="8.589934591"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="10.021590356"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="11.453246121"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="12.884901886"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="14.316557651"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="15.748213416"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="17.179869184"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="22.906492245"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="28.633115306"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="30.0"} 12528
+http_server_requests_seconds_bucket{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links",le="+Inf"} 12528
+http_server_requests_seconds_count{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links"} 12528
+http_server_requests_seconds_sum{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links"} 602.691011777
+# HELP http_server_requests_seconds_max  
+# TYPE http_server_requests_seconds_max gauge
+http_server_requests_seconds_max{application="url-shortener",error="CannotCreateTransactionException",exception="CannotCreateTransactionException",method="GET",outcome="SERVER_ERROR",status="500",uri="/{code:[0-9A-Za-z]{1,12}}"} 0.0
+http_server_requests_seconds_max{application="url-shortener",error="none",exception="none",method="GET",outcome="REDIRECTION",status="302",uri="/{code:[0-9A-Za-z]{1,12}}"} 0.127933027
+http_server_requests_seconds_max{application="url-shortener",error="none",exception="none",method="GET",outcome="SUCCESS",status="200",uri="/actuator/health"} 0.016219033
+http_server_requests_seconds_max{application="url-shortener",error="none",exception="none",method="POST",outcome="SUCCESS",status="201",uri="/api/v1/links"} 0.015366594
+# HELP jdbc_connections_active Current number of active connections that have been allocated from the data source.
+# TYPE jdbc_connections_active gauge
+jdbc_connections_active{application="url-shortener",name="dataSource"} 0.0
+# HELP jdbc_connections_idle Number of established but idle connections.
+# TYPE jdbc_connections_idle gauge
+jdbc_connections_idle{application="url-shortener",name="dataSource"} 10.0
+# HELP jdbc_connections_max Maximum number of active connections that can be allocated at the same time.
+# TYPE jdbc_connections_max gauge
+jdbc_connections_max{application="url-shortener",name="dataSource"} 10.0
+# HELP jdbc_connections_min Minimum number of idle connections in the pool.
+# TYPE jdbc_connections_min gauge
+jdbc_connections_min{application="url-shortener",name="dataSource"} 2.0
+# HELP jvm_info JVM version info
+# TYPE jvm_info gauge
+jvm_info{application="url-shortener",runtime="OpenJDK Runtime Environment",vendor="Eclipse Adoptium",version="21.0.13.1+2-LTS"} 1
+# HELP jvm_buffer_count_buffers An estimate of the number of buffers in the pool
+# TYPE jvm_buffer_count_buffers gauge
+jvm_buffer_count_buffers{application="url-shortener",id="direct"} 201.0
+jvm_buffer_count_buffers{application="url-shortener",id="mapped"} 0.0
+jvm_buffer_count_buffers{application="url-shortener",id="mapped - 'non-volatile memory'"} 0.0
+# HELP jvm_buffer_memory_used_bytes An estimate of the memory that the Java virtual machine is using for this buffer pool
+# TYPE jvm_buffer_memory_used_bytes gauge
+jvm_buffer_memory_used_bytes{application="url-shortener",id="direct"} 1648640.0
+jvm_buffer_memory_used_bytes{application="url-shortener",id="mapped"} 0.0
+jvm_buffer_memory_used_bytes{application="url-shortener",id="mapped - 'non-volatile memory'"} 0.0
+# HELP jvm_buffer_total_capacity_bytes An estimate of the total capacity of the buffers in this pool
+# TYPE jvm_buffer_total_capacity_bytes gauge
+jvm_buffer_total_capacity_bytes{application="url-shortener",id="direct"} 1648640.0
+jvm_buffer_total_capacity_bytes{application="url-shortener",id="mapped"} 0.0
+jvm_buffer_total_capacity_bytes{application="url-shortener",id="mapped - 'non-volatile memory'"} 0.0
+# HELP jvm_classes_loaded_classes The number of classes that are currently loaded in the Java virtual machine
+# TYPE jvm_classes_loaded_classes gauge
+jvm_classes_loaded_classes{application="url-shortener"} 19128.0
+# HELP jvm_classes_unloaded_classes_total The total number of classes unloaded since the Java virtual machine has started execution
+# TYPE jvm_classes_unloaded_classes_total counter
+jvm_classes_unloaded_classes_total{application="url-shortener"} 365.0
+# HELP jvm_compilation_time_ms_total The approximate accumulated elapsed time spent in compilation
+# TYPE jvm_compilation_time_ms_total counter
+jvm_compilation_time_ms_total{application="url-shortener",compiler="HotSpot 64-Bit Tiered Compilers"} 151922.0
+# HELP jvm_gc_live_data_size_bytes Size of long-lived heap memory pool after reclamation
+# TYPE jvm_gc_live_data_size_bytes gauge
+jvm_gc_live_data_size_bytes{application="url-shortener"} 6.1770288E7
+# HELP jvm_gc_max_data_size_bytes Max size of long-lived heap memory pool
+# TYPE jvm_gc_max_data_size_bytes gauge
+jvm_gc_max_data_size_bytes{application="url-shortener"} 3.57957632E8
+# HELP jvm_gc_memory_allocated_bytes_total Incremented for an increase in the size of the (young) heap memory pool after one GC to before the next
+# TYPE jvm_gc_memory_allocated_bytes_total counter
+jvm_gc_memory_allocated_bytes_total{application="url-shortener"} 5.9688255504E10
+# HELP jvm_gc_memory_promoted_bytes_total Count of positive increases in the size of the old generation memory pool before GC to after GC
+# TYPE jvm_gc_memory_promoted_bytes_total counter
+jvm_gc_memory_promoted_bytes_total{application="url-shortener"} 1.59656008E8
+# HELP jvm_gc_overhead An approximation of the percent of CPU time used by GC activities over the last lookback period or since monitoring began, whichever is shorter, in the range [0..1]
+# TYPE jvm_gc_overhead gauge
+jvm_gc_overhead{application="url-shortener"} 0.008546666666666666
+# HELP jvm_gc_pause_seconds Time spent in GC pause
+# TYPE jvm_gc_pause_seconds summary
+jvm_gc_pause_seconds_count{action="end of major GC",application="url-shortener",cause="Allocation Failure",gc="MarkSweepCompact"} 2
+jvm_gc_pause_seconds_sum{action="end of major GC",application="url-shortener",cause="Allocation Failure",gc="MarkSweepCompact"} 0.28
+jvm_gc_pause_seconds_count{action="end of major GC",application="url-shortener",cause="CodeCache GC Threshold",gc="MarkSweepCompact"} 1
+jvm_gc_pause_seconds_sum{action="end of major GC",application="url-shortener",cause="CodeCache GC Threshold",gc="MarkSweepCompact"} 0.138
+jvm_gc_pause_seconds_count{action="end of minor GC",application="url-shortener",cause="Allocation Failure",gc="Copy"} 1244
+jvm_gc_pause_seconds_sum{action="end of minor GC",application="url-shortener",cause="Allocation Failure",gc="Copy"} 5.374
+# HELP jvm_gc_pause_seconds_max Time spent in GC pause
+# TYPE jvm_gc_pause_seconds_max gauge
+jvm_gc_pause_seconds_max{action="end of major GC",application="url-shortener",cause="Allocation Failure",gc="MarkSweepCompact"} 0.122
+jvm_gc_pause_seconds_max{action="end of major GC",application="url-shortener",cause="CodeCache GC Threshold",gc="MarkSweepCompact"} 0.0
+jvm_gc_pause_seconds_max{action="end of minor GC",application="url-shortener",cause="Allocation Failure",gc="Copy"} 0.006
+# HELP jvm_memory_committed_bytes The amount of memory in bytes that is committed for the Java virtual machine to use
+# TYPE jvm_memory_committed_bytes gauge
+jvm_memory_committed_bytes{application="url-shortener",area="heap",id="Eden Space"} 4.8037888E7
+jvm_memory_committed_bytes{application="url-shortener",area="heap",id="Survivor Space"} 5963776.0
+jvm_memory_committed_bytes{application="url-shortener",area="heap",id="Tenured Gen"} 1.19861248E8
+jvm_memory_committed_bytes{application="url-shortener",area="nonheap",id="CodeHeap 'non-nmethods'"} 2555904.0
+jvm_memory_committed_bytes{application="url-shortener",area="nonheap",id="CodeHeap 'non-profiled nmethods'"} 1.5138816E7
+jvm_memory_committed_bytes{application="url-shortener",area="nonheap",id="CodeHeap 'profiled nmethods'"} 3.2309248E7
+jvm_memory_committed_bytes{application="url-shortener",area="nonheap",id="Compressed Class Space"} 1.376256E7
+jvm_memory_committed_bytes{application="url-shortener",area="nonheap",id="Metaspace"} 1.00859904E8
+# HELP jvm_memory_max_bytes The maximum amount of memory in bytes that can be used for memory management
+# TYPE jvm_memory_max_bytes gauge
+jvm_memory_max_bytes{application="url-shortener",area="heap",id="Eden Space"} 1.43130624E8
+jvm_memory_max_bytes{application="url-shortener",area="heap",id="Survivor Space"} 1.7891328E7
+jvm_memory_max_bytes{application="url-shortener",area="heap",id="Tenured Gen"} 3.57957632E8
+jvm_memory_max_bytes{application="url-shortener",area="nonheap",id="CodeHeap 'non-nmethods'"} 5828608.0
+jvm_memory_max_bytes{application="url-shortener",area="nonheap",id="CodeHeap 'non-profiled nmethods'"} 1.22916864E8
+jvm_memory_max_bytes{application="url-shortener",area="nonheap",id="CodeHeap 'profiled nmethods'"} 1.22912768E8
+jvm_memory_max_bytes{application="url-shortener",area="nonheap",id="Compressed Class Space"} 1.073741824E9
+jvm_memory_max_bytes{application="url-shortener",area="nonheap",id="Metaspace"} -1.0
+# HELP jvm_memory_usage_after_gc The percentage of long-lived heap pool used after the last GC event, in the range [0..1]
+# TYPE jvm_memory_usage_after_gc gauge
+jvm_memory_usage_after_gc{application="url-shortener",area="heap",pool="long-lived"} 0.278014019268068
+# HELP jvm_memory_used_bytes The amount of used memory
+# TYPE jvm_memory_used_bytes gauge
+jvm_memory_used_bytes{application="url-shortener",area="heap",id="Eden Space"} 2977960.0
+jvm_memory_used_bytes{application="url-shortener",area="heap",id="Survivor Space"} 2519760.0
+jvm_memory_used_bytes{application="url-shortener",area="heap",id="Tenured Gen"} 9.951724E7
+jvm_memory_used_bytes{application="url-shortener",area="nonheap",id="CodeHeap 'non-nmethods'"} 1526400.0
+jvm_memory_used_bytes{application="url-shortener",area="nonheap",id="CodeHeap 'non-profiled nmethods'"} 1.3955328E7
+jvm_memory_used_bytes{application="url-shortener",area="nonheap",id="CodeHeap 'profiled nmethods'"} 1.5170816E7
+jvm_memory_used_bytes{application="url-shortener",area="nonheap",id="Compressed Class Space"} 1.3075768E7
+jvm_memory_used_bytes{application="url-shortener",area="nonheap",id="Metaspace"} 9.9159112E7
+# HELP jvm_threads_daemon_threads The current number of live daemon threads
+# TYPE jvm_threads_daemon_threads gauge
+jvm_threads_daemon_threads{application="url-shortener"} 211.0
+# HELP jvm_threads_live_threads The current number of live threads including both daemon and non-daemon threads
+# TYPE jvm_threads_live_threads gauge
+jvm_threads_live_threads{application="url-shortener"} 215.0
+# HELP jvm_threads_peak_threads The peak live thread count since the Java virtual machine started or peak was reset
+# TYPE jvm_threads_peak_threads gauge
+jvm_threads_peak_threads{application="url-shortener"} 216.0
+# HELP jvm_threads_started_threads_total The total number of application threads started in the JVM
+# TYPE jvm_threads_started_threads_total counter
+jvm_threads_started_threads_total{application="url-shortener"} 220.0
+# HELP jvm_threads_states_threads The current number of threads
+# TYPE jvm_threads_states_threads gauge
+jvm_threads_states_threads{application="url-shortener",state="blocked"} 0.0
+jvm_threads_states_threads{application="url-shortener",state="new"} 0.0
+jvm_threads_states_threads{application="url-shortener",state="runnable"} 7.0
+jvm_threads_states_threads{application="url-shortener",state="terminated"} 0.0
+jvm_threads_states_threads{application="url-shortener",state="timed-waiting"} 206.0
+jvm_threads_states_threads{application="url-shortener",state="waiting"} 2.0
+# HELP links_total Short links created
+# TYPE links_total counter
+links_total{application="url-shortener"} 12528.0
+# HELP links_redirects_total  
+# TYPE links_redirects_total counter
+links_redirects_total{application="url-shortener",outcome="hit"} 1093640.0
+# HELP logback_events_total Number of log events that were enabled by the effective log level
+# TYPE logback_events_total counter
+logback_events_total{application="url-shortener",level="debug"} 0.0
+logback_events_total{application="url-shortener",level="error"} 8.0
+logback_events_total{application="url-shortener",level="info"} 5.0
+logback_events_total{application="url-shortener",level="trace"} 0.0
+logback_events_total{application="url-shortener",level="warn"} 4.0
+# HELP process_cpu_time_ns_total The "cpu time" used by the Java Virtual Machine process
+# TYPE process_cpu_time_ns_total counter
+process_cpu_time_ns_total{application="url-shortener"} 5.4709E11
+# HELP process_cpu_usage The "recent cpu usage" for the Java Virtual Machine process
+# TYPE process_cpu_usage gauge
+process_cpu_usage{application="url-shortener"} 0.5940173724212812
+# HELP process_files_max_files The maximum file descriptor count
+# TYPE process_files_max_files gauge
+process_files_max_files{application="url-shortener"} 524288.0
+# HELP process_files_open_files The open file descriptor count
+# TYPE process_files_open_files gauge
+process_files_open_files{application="url-shortener"} 23.0
+# HELP process_start_time_seconds Start time of the process since unix epoch.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds{application="url-shortener"} 1.795497139264E9
+# HELP process_uptime_seconds The uptime of the Java virtual machine
+# TYPE process_uptime_seconds gauge
+process_uptime_seconds{application="url-shortener"} 559.238
+# HELP spring_data_repository_invocations_seconds Duration of repository invocations
+# TYPE spring_data_repository_invocations_seconds summary
+spring_data_repository_invocations_seconds_count{application="url-shortener",exception="None",method="findByShortCode",repository="LinkRepository",state="SUCCESS"} 1093640
+spring_data_repository_invocations_seconds_sum{application="url-shortener",exception="None",method="findByShortCode",repository="LinkRepository",state="SUCCESS"} 905.586606233
+spring_data_repository_invocations_seconds_count{application="url-shortener",exception="None",method="nextId",repository="LinkRepository",state="SUCCESS"} 12528
+spring_data_repository_invocations_seconds_sum{application="url-shortener",exception="None",method="nextId",repository="LinkRepository",state="SUCCESS"} 10.117702417
+spring_data_repository_invocations_seconds_count{application="url-shortener",exception="None",method="save",repository="LinkRepository",state="SUCCESS"} 12528
+spring_data_repository_invocations_seconds_sum{application="url-shortener",exception="None",method="save",repository="LinkRepository",state="SUCCESS"} 1.455439629
+# HELP spring_data_repository_invocations_seconds_max Duration of repository invocations
+# TYPE spring_data_repository_invocations_seconds_max gauge
+spring_data_repository_invocations_seconds_max{application="url-shortener",exception="None",method="findByShortCode",repository="LinkRepository",state="SUCCESS"} 0.127093935
+spring_data_repository_invocations_seconds_max{application="url-shortener",exception="None",method="nextId",repository="LinkRepository",state="SUCCESS"} 0.003997831
+spring_data_repository_invocations_seconds_max{application="url-shortener",exception="None",method="save",repository="LinkRepository",state="SUCCESS"} 3.94065E-4
+# HELP system_cpu_count The number of processors available to the Java virtual machine
+# TYPE system_cpu_count gauge
+system_cpu_count{application="url-shortener"} 2.0
+# HELP system_cpu_usage The "recent cpu usage" of the system the application is running in
+# TYPE system_cpu_usage gauge
+system_cpu_usage{application="url-shortener"} 0.6014959218241043
+# HELP system_load_average_1m The sum of the number of runnable entities queued to available processors and the number of runnable entities running on the available processors averaged over a period of time
+# TYPE system_load_average_1m gauge
+system_load_average_1m{application="url-shortener"} 2.77734375
+# HELP tomcat_sessions_active_current_sessions  
+# TYPE tomcat_sessions_active_current_sessions gauge
+tomcat_sessions_active_current_sessions{application="url-shortener"} 0.0
+# HELP tomcat_sessions_active_max_sessions  
+# TYPE tomcat_sessions_active_max_sessions gauge
+tomcat_sessions_active_max_sessions{application="url-shortener"} 0.0
+# HELP tomcat_sessions_alive_max_seconds  
+# TYPE tomcat_sessions_alive_max_seconds gauge
+tomcat_sessions_alive_max_seconds{application="url-shortener"} 0.0
+# HELP tomcat_sessions_created_sessions_total  
+# TYPE tomcat_sessions_created_sessions_total counter
+tomcat_sessions_created_sessions_total{application="url-shortener"} 0.0
+# HELP tomcat_sessions_expired_sessions_total  
+# TYPE tomcat_sessions_expired_sessions_total counter
+tomcat_sessions_expired_sessions_total{application="url-shortener"} 0.0
+# HELP tomcat_sessions_rejected_sessions_total  
+# TYPE tomcat_sessions_rejected_sessions_total counter
+tomcat_sessions_rejected_sessions_total{application="url-shortener"} 0.0
