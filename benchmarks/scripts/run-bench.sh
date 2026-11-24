@@ -2,6 +2,7 @@
 # One command per run: clean stack -> migrate -> seed -> warm up -> measure -> save -> tear down.
 # Usage: VERSION=v0-naive benchmarks/scripts/run-bench.sh      (normally via: make bench VERSION=...)
 # Env:   MODE=measure|saturation  RATE=500  SEED_ROWS=10000000  WARMUP_DURATION=2m  DURATION=5m
+#        BUCKET=10 (timeseries.csv bucket, seconds)  KEEP_RAW=1 (keep raw k6 json.gz)
 #
 # The app image is built from the CURRENT working tree. Check out the version's tag/commit first;
 # the commit and dirty flag are recorded in env.txt so a result can be traced to its code.
@@ -82,10 +83,17 @@ STATS_PID=$!
 
 echo "== k6 $MODE"
 K6_STATUS=0
-run_k6 run --summary-export /results/summary.json /scripts/scenarios/redirect-read-heavy.js \
+run_k6 run --summary-export /results/summary.json --out json=/results/raw.json.gz \
+  /scripts/scenarios/redirect-read-heavy.js \
   2>&1 | tee "$BENCH_OUT/k6-stdout.log" || K6_STATUS=${PIPESTATUS[0]}
 
 kill "$STATS_PID" 2>/dev/null || true; STATS_PID=""
+
+# Latency over time (needed to find the saturation knee). The raw points are large, so they are
+# deleted after processing unless KEEP_RAW=1.
+python3 "$ROOT/benchmarks/scripts/timeseries.py" "$BENCH_OUT/raw.json.gz" "$BENCH_OUT/timeseries.csv" "${BUCKET:-10}" \
+  || echo "WARN: timeseries.csv not produced"
+[[ "${KEEP_RAW:-0}" == "1" ]] || rm -f "$BENCH_OUT/raw.json.gz"
 
 "${PSQL[@]}" -c "\\copy (SELECT calls, round(total_exec_time::numeric,1) AS total_ms, round(mean_exec_time::numeric,3) AS mean_ms, rows, left(query,120) AS query FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT 15) TO STDOUT WITH CSV HEADER" \
   > "$BENCH_OUT/pg_stat_statements.csv"
