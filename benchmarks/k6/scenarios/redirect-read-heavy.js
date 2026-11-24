@@ -1,113 +1,144 @@
 /**
- * k6 load test scenario: redirect-read-heavy
+ * k6 scenario: redirect-read-heavy
  *
- * Simulates a realistic URL shortener workload:
- * - ~100:1 read-to-write ratio
- * - Zipf-like key distribution (hot short codes get most traffic)
- * - constant-arrival-rate to avoid coordinated omission
+ * Workload: ~100:1 redirects to creates, Zipf(s=1) key popularity over SEED_ROWS seeded links,
+ * open-model load (arrival-rate executors) so slow responses cannot throttle the offered load
+ * (avoids coordinated omission).
  *
- * Run via Makefile: make bench VERSION=v0-naive
+ * MODE (env):
+ *   warmup     constant rate for WARMUP_DURATION; results are discarded by run-bench.sh
+ *   measure    constant rate for DURATION (default)
+ *   saturation ramps the rate up to find the knee; pick the measure RATE at ~70% of it
  *
- * Pre-requisites:
- *   - Stack must be running: make up
- *   - Short codes must be seeded (see benchmarks/scripts/seed.sh)
+ * Other env: BASE_URL, RATE (redirects/s), SEED_ROWS (must match benchmarks/scripts/seed.sql).
+ * Run via: make bench VERSION=v0-naive  (see benchmarks/scripts/run-bench.sh)
  */
 
 import http from "k6/http";
-import { check, sleep } from "k6";
-import { Rate, Trend } from "k6/metrics";
+import { check } from "k6";
 
-// ─── Custom metrics ───────────────────────────────────────────────────────────
-const redirectErrors = new Rate("redirect_errors");
-const redirectLatency = new Trend("redirect_latency_ms", true);
-
-// ─── Configuration ────────────────────────────────────────────────────────────
 const BASE_URL = __ENV.BASE_URL || "http://localhost:8080";
+const MODE = __ENV.MODE || "measure";
+const RATE = parseInt(__ENV.RATE || "500", 10);
+const SEED_ROWS = parseInt(__ENV.SEED_ROWS || "10000000", 10);
+const DURATION = __ENV.DURATION || "5m";
+const WARMUP_DURATION = __ENV.WARMUP_DURATION || "2m";
+const WRITE_DIVISOR = 100; // 100:1 read:write
 
-// Seed these short codes before running the benchmark.
-// Generate with: benchmarks/scripts/seed.sh
-const SHORT_CODES = JSON.parse(open("../data/short_codes.json") || "[]");
-
-// Zipf-like distribution: first 10% of codes receive ~60% of traffic
-function zipfCode() {
-  const r = Math.random();
-  if (r < 0.6) {
-    // hot tier: top 10%
-    return SHORT_CODES[Math.floor(Math.random() * Math.max(1, SHORT_CODES.length * 0.1))];
-  } else if (r < 0.9) {
-    // warm tier: next 30%
-    const offset = Math.floor(SHORT_CODES.length * 0.1);
-    return SHORT_CODES[offset + Math.floor(Math.random() * Math.max(1, SHORT_CODES.length * 0.3))];
-  } else {
-    // cold tier: remaining 60%
-    const offset = Math.floor(SHORT_CODES.length * 0.4);
-    return SHORT_CODES[offset + Math.floor(Math.random() * Math.max(1, SHORT_CODES.length * 0.6))];
-  }
+// ─── Key distribution ─────────────────────────────────────────────────────────
+// Zipf with s=1: P(rank=k) ~ 1/k, so CDF ~ ln(k)/ln(N) and rank = floor(N^u) for u~U(0,1).
+// Ranks are then scattered over ids with a bijection (multiplier coprime with SEED_ROWS) so
+// the hot keys are not physically adjacent rows, which would flatter the database.
+const SCATTER = 1000003;
+function gcd(a, b) {
+  return b === 0 ? a : gcd(b, a % b);
+}
+if (gcd(SCATTER, SEED_ROWS) !== 1) {
+  throw new Error(`SEED_ROWS=${SEED_ROWS} must be coprime with ${SCATTER} (1000003 is prime, so avoid multiples of it)`);
 }
 
-// ─── Scenarios ────────────────────────────────────────────────────────────────
+const ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+function base62(n) {
+  if (n === 0) return "0";
+  let s = "";
+  while (n > 0) {
+    s = ALPHABET[n % 62] + s;
+    n = Math.floor(n / 62);
+  }
+  return s;
+}
+
+// mulberry32: small seedable PRNG, one stream per VU (k6's Math.random cannot be seeded).
+// Streams are deterministic per VU; which VU serves which request is not.
+let rng = null;
+function rand() {
+  if (rng === null) {
+    let a = (0x9e3779b9 ^ (__VU * 2654435761)) >>> 0;
+    rng = () => {
+      a = (a + 0x6d2b79f5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  return rng();
+}
+
+function zipfCode() {
+  const rank = Math.min(SEED_ROWS, Math.floor(Math.pow(SEED_ROWS, rand()))); // 1..N
+  const id = ((rank * SCATTER) % SEED_ROWS) + 1; // 1..N, bijective
+  return base62(id);
+}
+
+// ─── Load shape ───────────────────────────────────────────────────────────────
+function constant(rate, duration, exec, vus, maxVus) {
+  return {
+    executor: "constant-arrival-rate",
+    rate,
+    timeUnit: "1s",
+    duration,
+    preAllocatedVUs: vus,
+    maxVUs: maxVus,
+    exec,
+  };
+}
+
+function ramp(peak, exec, vus, maxVus) {
+  const steps = 10; // linear ramp to peak, 30s per step
+  const stages = [];
+  for (let i = 1; i <= steps; i++) {
+    stages.push({ target: Math.max(1, Math.round((peak * i) / steps)), duration: "30s" });
+  }
+  return { executor: "ramping-arrival-rate", startRate: 1, timeUnit: "1s", stages, preAllocatedVUs: vus, maxVUs: maxVus, exec };
+}
+
+function scenarios() {
+  const createRate = Math.max(1, Math.round(RATE / WRITE_DIVISOR));
+  if (MODE === "saturation") {
+    // RATE is the peak of the ramp here.
+    return { redirects: ramp(RATE, "redirect", 100, 1000), creates: ramp(createRate, "create", 10, 100) };
+  }
+  const duration = MODE === "warmup" ? WARMUP_DURATION : DURATION;
+  return {
+    redirects: constant(RATE, duration, "redirect", 100, 1000),
+    creates: constant(createRate, duration, "create", 10, 100),
+  };
+}
+
 export const options = {
-  scenarios: {
-    redirects: {
-      executor: "constant-arrival-rate",
-      rate: __ENV.REDIRECT_RATE || 500,   // requests/second — tune to ~70% saturation
-      timeUnit: "1s",
-      duration: __ENV.DURATION || "5m",
-      preAllocatedVUs: 50,
-      maxVUs: 200,
-      exec: "redirect",
-    },
-    creates: {
-      executor: "constant-arrival-rate",
-      rate: __ENV.CREATE_RATE || 5,       // 100:1 read-to-write
-      timeUnit: "1s",
-      duration: __ENV.DURATION || "5m",
-      preAllocatedVUs: 5,
-      maxVUs: 20,
-      exec: "create",
-    },
-  },
+  scenarios: scenarios(),
+  summaryTrendStats: ["avg", "min", "med", "p(90)", "p(95)", "p(99)", "max", "count"],
   thresholds: {
-    // These will be meaningful after Phase 1 optimizations.
-    // Phase 0 baseline: just capture what we get.
-    "http_req_duration{scenario:redirects}": ["p(99)<5000"], // very lenient for baseline
-    redirect_errors: ["rate<0.05"],
+    // Thresholds only gate the exit code; the baseline just records what it gets. The empty-ish
+    // bounds exist so k6 reports per-endpoint sub-metrics in the summary.
+    "http_req_duration{name:redirect}": ["p(99)<60000"],
+    "http_req_duration{name:create}": ["p(99)<60000"],
+    "http_req_failed{name:redirect}": ["rate<1"],
+    "http_req_failed{name:create}": ["rate<1"],
+    dropped_iterations: ["count>=0"],
   },
 };
 
-// ─── Scenario: redirect ───────────────────────────────────────────────────────
+// ─── Scenarios ────────────────────────────────────────────────────────────────
 export function redirect() {
-  if (SHORT_CODES.length === 0) {
-    console.warn("No short codes loaded. Run seed script first.");
-    return;
-  }
-
-  const code = zipfCode();
-  const start = Date.now();
-  const res = http.get(`${BASE_URL}/s/${code}`, {
+  const res = http.get(`${BASE_URL}/${zipfCode()}`, {
     redirects: 0, // measure the redirect response, not the destination
     tags: { name: "redirect" },
+    responseCallback: http.expectedStatuses(302),
   });
-  redirectLatency.add(Date.now() - start);
-
-  const ok = check(res, {
-    "redirect status is 301 or 302": (r) => r.status === 301 || r.status === 302,
-  });
-  redirectErrors.add(!ok);
+  check(res, { "redirect is 302": (r) => r.status === 302 });
 }
 
-// ─── Scenario: create ────────────────────────────────────────────────────────
 export function create() {
-  const payload = JSON.stringify({
-    longUrl: `https://example.com/article/${Math.random().toString(36).slice(2)}`,
-  });
-
-  const res = http.post(`${BASE_URL}/api/v1/links`, payload, {
-    headers: { "Content-Type": "application/json" },
-    tags: { name: "create" },
-  });
-
-  check(res, {
-    "create status is 201": (r) => r.status === 201,
-  });
+  const res = http.post(
+    `${BASE_URL}/api/v1/links`,
+    JSON.stringify({ longUrl: `https://example.com/article/${__VU}-${__ITER}-${Date.now()}` }),
+    {
+      headers: { "Content-Type": "application/json" },
+      tags: { name: "create" },
+      responseCallback: http.expectedStatuses(201),
+    }
+  );
+  check(res, { "create is 201": (r) => r.status === 201 });
 }
