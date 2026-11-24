@@ -6,11 +6,12 @@
  * (avoids coordinated omission).
  *
  * MODE (env):
- *   warmup     constant rate for WARMUP_DURATION; results are discarded by run-bench.sh
  *   measure    constant rate for DURATION (default)
  *   saturation ramps the rate up to find the knee; pick the measure RATE at ~70% of it
  *
- * Other env: BASE_URL, RATE (redirects/s), SEED_ROWS (must match benchmarks/scripts/seed.sql).
+ * Other env: BASE_URL, RATE (redirects/s), DURATION (measure only), SEED_ROWS (must match
+ * benchmarks/scripts/seed.sql). run-bench.sh also runs this file as a discarded warm-up: same
+ * scenario in measure mode with the warm-up RATE and DURATION.
  * Run via: make bench VERSION=v0-naive  (see benchmarks/scripts/run-bench.sh)
  */
 
@@ -22,7 +23,6 @@ const MODE = __ENV.MODE || "measure";
 const RATE = parseInt(__ENV.RATE || "500", 10);
 const SEED_ROWS = parseInt(__ENV.SEED_ROWS || "10000000", 10);
 const DURATION = __ENV.DURATION || "5m";
-const WARMUP_DURATION = __ENV.WARMUP_DURATION || "2m";
 const WRITE_DIVISOR = 100; // 100:1 read:write
 
 // ─── Key distribution ─────────────────────────────────────────────────────────
@@ -99,10 +99,9 @@ function scenarios() {
     // RATE is the peak of the ramp here.
     return { redirects: ramp(RATE, "redirect", 100, 1000), creates: ramp(createRate, "create", 10, 100) };
   }
-  const duration = MODE === "warmup" ? WARMUP_DURATION : DURATION;
   return {
-    redirects: constant(RATE, duration, "redirect", 100, 1000),
-    creates: constant(createRate, duration, "create", 10, 100),
+    redirects: constant(RATE, DURATION, "redirect", 100, 1000),
+    creates: constant(createRate, DURATION, "create", 10, 100),
   };
 }
 

@@ -16,7 +16,7 @@ WARMUP_DURATION=${WARMUP_DURATION:-2m}
 # Saturation's RATE is the ramp peak, far above a safe warm-up rate, so warm up at a fixed low rate.
 if [[ "$MODE" == "saturation" ]]; then WARMUP_RATE=${WARMUP_RATE:-1000}; else WARMUP_RATE=${WARMUP_RATE:-$RATE}; fi
 DURATION=${DURATION:-5m}
-export MODE RATE SEED_ROWS DURATION WARMUP_DURATION
+export MODE RATE SEED_ROWS DURATION
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)
 TS=$(date +%Y%m%dT%H%M%S)
@@ -28,7 +28,7 @@ mkdir -p "$BENCH_OUT"
 
 COMPOSE=(docker compose -f "$ROOT/deploy/docker-compose.bench.yml")
 PSQL=("${COMPOSE[@]}" exec -T postgres psql -U urlshortener -d urlshortener -v ON_ERROR_STOP=1)
-K6_ENV=(-e MODE -e RATE -e SEED_ROWS -e DURATION -e WARMUP_DURATION)
+K6_ENV=(-e MODE -e RATE -e SEED_ROWS -e DURATION)
 
 STATS_PID=""
 cleanup() {
@@ -68,7 +68,7 @@ SEED_SECONDS=$(( $(date +%s) - SEED_START ))
 run_k6() { "${COMPOSE[@]}" --profile load run --rm -T "${K6_ENV[@]}" k6 "$@"; }
 
 echo "== warm-up ($WARMUP_DURATION at $WARMUP_RATE req/s, results discarded)"
-MODE=warmup RATE=$WARMUP_RATE run_k6 run /scripts/scenarios/redirect-read-heavy.js > "$BENCH_OUT/warmup.log" 2>&1 || true
+MODE=measure RATE=$WARMUP_RATE DURATION=$WARMUP_DURATION run_k6 run /scripts/scenarios/redirect-read-heavy.js > "$BENCH_OUT/warmup.log" 2>&1 || true
 
 "${PSQL[@]}" -qc "SELECT pg_stat_statements_reset()" > /dev/null
 
