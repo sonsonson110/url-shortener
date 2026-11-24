@@ -2,7 +2,10 @@
 # dev data. Driven by benchmarks/scripts/run-bench.sh (needs BENCH_OUT, BENCH_UID, BENCH_GID).
 #
 # Fixed resource limits (same for every version, see AGENTS.md section 7):
-#   postgres 2 CPU / 2 GB, app 2 CPU / 1 GB, k6 2 CPU / 2 GB. Host has 8 cores.
+#   postgres 2 CPU / 2 GB, app 2 CPU / 1 GB, k6 2 CPU / 2 GB. Host has 8 threads (4 cores).
+# CPU is set with cpu_period/cpu_quota (2 CPUs = quota 200000 per period 100000) because older
+# Compose v2 releases ignore `cpus:` (v2.3.3 here) and mis-convert deploy.resources.limits.cpus.
+# Verified with: docker inspect -f '{{.HostConfig.CpuQuota}}' and a CPU burn in the container.
 name: urlshortener-bench
 
 services:
@@ -21,7 +24,8 @@ services:
       - shared_buffers=512MB
       - -c
       - effective_cache_size=1536MB
-    cpus: 2
+    cpu_period: 100000
+    cpu_quota: 200000   # = 2 CPUs
     mem_limit: 2g
     # Docker's default /dev/shm is 64 MB; parallel workers in the 10M-row seed/VACUUM need more.
     shm_size: 1g
@@ -48,7 +52,8 @@ services:
       MANAGEMENT_HEALTH_REDIS_ENABLED: "false"
     ports:
       - "18080:8080"   # smoke tests from the host; k6 uses the internal network
-    cpus: 2
+    cpu_period: 100000
+    cpu_quota: 200000   # = 2 CPUs
     mem_limit: 1g
     depends_on:
       postgres:
@@ -66,7 +71,8 @@ services:
     user: "${BENCH_UID:-1000}:${BENCH_GID:-1000}"
     environment:
       BASE_URL: http://app:8080
-    cpus: 2
+    cpu_period: 100000
+    cpu_quota: 200000   # = 2 CPUs
     mem_limit: 2g
     depends_on:
       app:
