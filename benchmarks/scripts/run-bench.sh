@@ -50,7 +50,7 @@ SEED_SECONDS=$(( $(date +%s) - SEED_START ))
   echo "mode=$MODE rate=$RATE seed_rows=$SEED_ROWS warmup=$WARMUP_DURATION duration=$DURATION"
   echo "seed_seconds=$SEED_SECONDS (setup time, not a benchmark result)"
   echo "git_commit=$(git -C "$ROOT" rev-parse HEAD)"
-  echo "git_dirty=$([[ -n "$(git -C "$ROOT" status --porcelain)" ]] && echo yes || echo no)"
+  echo "git_dirty=$([[ -n "$(git -C "$ROOT" status --porcelain -- . ':!benchmarks/results')" ]] && echo yes || echo no)"
   echo "date=$(date -Is)"
   echo "kernel=$(uname -sr)"
   echo "cpu=$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | xargs) cores=$(nproc)"
