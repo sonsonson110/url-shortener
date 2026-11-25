@@ -71,6 +71,9 @@ echo "== warm-up ($WARMUP_DURATION at $WARMUP_RATE req/s, results discarded)"
 MODE=measure RATE=$WARMUP_RATE DURATION=$WARMUP_DURATION run_k6 run /scripts/scenarios/redirect-read-heavy.js > "$BENCH_OUT/warmup.log" 2>&1 || true
 
 "${PSQL[@]}" -qc "SELECT pg_stat_statements_reset()" > /dev/null
+# Cache counters for the measured window only (no-ops on versions without Redis).
+"${COMPOSE[@]}" exec -T redis redis-cli CONFIG RESETSTAT > /dev/null 2>&1 || true
+"${COMPOSE[@]}" exec -T app wget -qO- http://localhost:8080/actuator/prometheus > "$BENCH_OUT/app-metrics-before.prom" || true
 
 (while true; do
    # Only this project's containers (the dev stack may be running too).
@@ -98,6 +101,7 @@ python3 "$ROOT/benchmarks/scripts/timeseries.py" "$BENCH_OUT/raw.json.gz" "$BENC
 "${PSQL[@]}" -c "\\copy (SELECT calls, round(total_exec_time::numeric,1) AS total_ms, round(mean_exec_time::numeric,3) AS mean_ms, rows, left(query,120) AS query FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT 15) TO STDOUT WITH CSV HEADER" \
   > "$BENCH_OUT/pg_stat_statements.csv"
 "${COMPOSE[@]}" exec -T app wget -qO- http://localhost:8080/actuator/prometheus > "$BENCH_OUT/app-metrics.prom" || true
+"${COMPOSE[@]}" exec -T redis redis-cli INFO > "$BENCH_OUT/redis-info.txt" 2>/dev/null || rm -f "$BENCH_OUT/redis-info.txt"
 
 echo "== done: $BENCH_OUT (k6 exit status $K6_STATUS)"
 exit "$K6_STATUS"

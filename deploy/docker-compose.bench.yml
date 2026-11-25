@@ -2,7 +2,8 @@
 # dev data. Driven by benchmarks/scripts/run-bench.sh (needs BENCH_OUT, BENCH_UID, BENCH_GID).
 #
 # Fixed resource limits (same for every version, see AGENTS.md section 7):
-#   postgres 2 CPU / 2 GB, app 2 CPU / 1 GB, k6 2 CPU / 2 GB. Host has 8 threads (4 cores).
+#   postgres 2 CPU / 2 GB, app 2 CPU / 1 GB, k6 2 CPU / 2 GB, redis 1 CPU / 512 MB (v2 onward).
+#   Host has 8 threads (4 cores): the quotas add up to 9, so they are limits, not reservations.
 # CPU is set with cpu_period/cpu_quota (2 CPUs = quota 200000 per period 100000) because older
 # Compose v2 releases ignore `cpus:` (v2.3.3 here) and mis-convert deploy.resources.limits.cpus.
 # Verified with: docker inspect -f '{{.HostConfig.CpuQuota}}' and a CPU burn in the container.
@@ -35,6 +36,28 @@ services:
       timeout: 3s
       retries: 20
 
+  # Cache for v2-redis-cache. No persistence, bounded memory, LRU eviction: it is a cache.
+  redis:
+    image: redis:7-alpine
+    command:
+      - redis-server
+      - --save
+      - ""
+      - --appendonly
+      - "no"
+      - --maxmemory
+      - 256mb
+      - --maxmemory-policy
+      - allkeys-lru
+    cpu_period: 100000
+    cpu_quota: 100000   # = 1 CPU (Redis runs commands on one thread)
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
   app:
     build:
       context: ..
@@ -48,8 +71,7 @@ services:
       JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=50"
       # DEBUG logging per request would be measured instead of the app.
       LOGGING_LEVEL_COM_URLSHORTENER: INFO
-      # v0 has no Redis code; without a Redis container the health indicator would report DOWN.
-      MANAGEMENT_HEALTH_REDIS_ENABLED: "false"
+      REDIS_HOST: redis
     ports:
       - "18080:8080"   # smoke tests from the host; k6 uses the internal network
     cpu_period: 100000
@@ -57,6 +79,8 @@ services:
     mem_limit: 1g
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep -q '\"status\":\"UP\"'"]
