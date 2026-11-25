@@ -33,11 +33,13 @@ Entry format:
 - Piece: `docs/adr/0002-id-generation.md`, `LinkService.create`
 - Asked: 2026-11-21
 - Question: Each instance calls `nextval` and base62-encodes the result. Why can two instances never produce the same code? `ConcurrentCreateTest` runs 32 threads in one JVM: what does it prove, and what would a multi-instance test prove that it does not?
-- Answer: A would use postgres and the id generator. multiple instances would all ask the postgres for the next unique id. everytime postgres return an id, it also increate the id counter, atomically. (2026-11-22, written for ADR 0002)
+- Answer: nextval gets atomic unique id from Postgres, base62 is 1-1; test proves concurrent requests on one instance don't conflict, not multiple instances.
 - Verdict: partial
-- Feedback: Correct on why the sequence is safe: nextval is atomic and Postgres holds the only counter. Missing the second half: what ConcurrentCreateTest proves (single JVM only) and what a multi-instance test would add.
+- Feedback: Missing what multi-instance test adds: separate JVMs/pools prove uniqueness comes from Postgres, not in-process state.
 - Box: 1
-- Re-ask: 2026-11-23
+- Re-ask: 2026-11-26
+- History:
+  - 2026-11-22: partial
 
 ### Q2: What happens to the sequence value when the insert rolls back?
 - Piece: `LinkService.create`, `LinkRepository.nextId`
@@ -50,14 +52,16 @@ Entry format:
 - Re-ask: 2026-11-23
 
 ### Q3: Find the bug in counter placement
-- Piece: `LinkService.create` (`createdCounter.increment()` inside `@Transactional`)
-- Asked: 2026-11-21
-- Question: The counter increments before the transaction commits. What goes wrong if the commit fails? What would you change, and which test would catch it?
-- Answer: Counter still increments if commit fails; remove @Transactional from create, call a separate transactional method, increment after it completes
+- Piece: `LinkService.create` (`TransactionSynchronization.afterCommit`), `LinkServiceCounterTest`
+- Asked: 2026-11-21 (reworded 2026-11-25 after fix 2e99805)
+- Question: `create` now increments `links.created` in `afterCommit`. Why not simply increment right after `save()`, given that `Link` has an assigned id? Which test pins this, and how does it force the failure?
+- Answer: Counter increments but isn't decremented if commit fails; wrap whole transaction in one block, increment only after it completes. No test named.
 - Verdict: partial
-- Feedback: Self-invocation bypasses the proxy; use another bean or TransactionTemplate; no test named.
+- Feedback: Vague fix, no test named (LinkServiceCounterTest). STALE: source now uses afterCommit.
 - Box: 1
-- Re-ask: 2026-11-23
+- Re-ask: 2026-11-26
+- History:
+  - 2026-11-22: partial
 
 ### Q4: Expiry boundary
 - Piece: `LinkService.resolve`
@@ -93,31 +97,37 @@ Entry format:
 - Piece: `docs/phase1-mvp-architecture.md` §7, `roadmap.md` §6
 - Asked: 2026-11-22
 - Question: see question bank
-- Answer: Database breaks first under load; roadmap plans caching for the hot path
+- Answer: App breaks first (100% CPU, DB ~40%); every request hits DB path; plan: Redis cache-aside with TTL plus stampede protection.
 - Verdict: partial
-- Feedback: Missing connection-pool saturation, Redis cache-aside, stampede protection, k6 benchmarks.
+- Feedback: Source: DB connections/Hikari pool saturate first; missing k6 benchmarks, hot keys. CPU numbers unbacked by saved run.
 - Box: 1
-- Re-ask: 2026-11-23
+- Re-ask: 2026-11-26
+- History:
+  - 2026-11-22: partial
 
 ### CODE-04: Why a regex on the redirect mapping
 - Piece: `RedirectController.java`
 - Asked: 2026-11-22
 - Question: see question bank
-- Answer: Code is base62 so only [0-9A-Za-z]; {1,12} enforces at least one character and a maximum length
-- Verdict: partial
-- Feedback: Missed main reason: avoid shadowing root paths like /actuator, /api, favicon.ico.
-- Box: 1
-- Re-ask: 2026-11-23
+- Answer: Regex enforces code pattern of 1-12 chars matching DB column; avoids conflict with root paths like /actuator and files like /index.html.
+- Verdict: correct
+- Feedback: Complete. Bank's /actuator claim looks imprecise (letters match regex); verify against RedirectController.
+- Box: 2
+- Re-ask: 2026-11-28
+- History:
+  - 2026-11-22: partial
 
 ### OBS-04: Scraped metric names
 - Piece: `LinkService.java`
 - Asked: 2026-11-22
 - Question: see question bank
-- Answer: Said a counter, rate per minute; didn't know the scraped metric names
-- Verdict: wrong
-- Feedback: Names are links_total and links_redirects_total{outcome}; dots become underscores, _total added. Note: the Prometheus client strips the reserved _created suffix, so links.created scrapes as links_total, not links_created_total (the first feedback and the bank had this wrong; corrected 2026-11-22 after checking /actuator/prometheus).
-- Box: 1
-- Re-ask: 2026-11-23
+- Answer: links.created -> links_total, links.redirects -> links_redirects_total
+- Verdict: correct
+- Feedback: Correct; also mention outcome label and that _created suffix is stripped.
+- Box: 2
+- Re-ask: 2026-11-28
+- History:
+  - 2026-11-22: wrong
 
 ## Retired
 

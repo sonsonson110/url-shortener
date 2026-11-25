@@ -55,9 +55,9 @@ The learning-log questions Q1–Q5 (`docs/learning-log.md`) are part of the pool
 - Grading points: that would put a DB write on the hottest path, and concurrent increments of the same row would contend. Proper counting is deferred to Phase 3 (click analytics / background jobs).
 
 ### HLD-07 · design · hard
-- Source: `docs/phase1-mvp-architecture.md` §7, `roadmap.md` §6
+- Source: `docs/phase1-mvp-architecture.md` §7, `roadmap.md` §6, `benchmarks/REPORT.md` (v0-naive)
 - Q: The system runs at 100:1 reads to writes with no cache. What breaks first, and what does the roadmap plan to do about it?
-- Grading points: every redirect is a Postgres lookup, so DB connections/CPU (and the HikariCP pool) saturate first, and redirect latency climbs. The plan is Redis cache-aside with TTL and stampede protection (weeks 6–7), proven with k6 before/after benchmarks (weeks 8–9). Strong answers note that hot keys concentrate load.
+- Grading points: every redirect is a Postgres lookup (an index scan, about 0.05 ms per call, so the query itself is cheap). Measured in v0-naive (`benchmarks/REPORT.md`): the app's own CPU (2-CPU cap, 93–100%) saturates first, at about 4,450 req/s, while Postgres sits at about 45–48% of its limit. Whether the Hikari pool (10 connections) is also a limit is not established. A cache removes the lookup but a hit still costs the HTTP handling, so the gain is expected to be smaller than the DB share suggests. The plan is Redis cache-aside with TTL and stampede protection (weeks 6–7), proven with k6 before/after benchmarks (weeks 8–9). Strong answers note that hot keys concentrate load.
 
 ### HLD-08 · recall · easy
 - Source: `docs/phase1-mvp-architecture.md` §1, `docs/BACKLOG.md`
@@ -143,7 +143,7 @@ The learning-log questions Q1–Q5 (`docs/learning-log.md`) are part of the pool
 ### CODE-04 · explain-why · medium
 - Source: `RedirectController.java`
 - Q: Why does the redirect mapping use the regex `{code:[0-9A-Za-z]{1,12}}` instead of plain `/{code}`?
-- Grading points: so it doesn't shadow `/actuator`, `/api`, or files with a dot like `favicon.ico`. It only matches valid base62 codes up to the column length.
+- Grading points: it only matches valid base62 codes up to the column length (`short_code` is `VARCHAR(12)`), so dotted paths like `favicon.ico` / `index.html`, other characters and over-long segments are never treated as codes. Note: the regex does NOT exclude letter-only words such as `actuator` or `api` (they match it); those are not at risk because actuator is served by its own handler mapping and `/actuator/health`, `/api/v1/links` have several path segments. (Read from the code, not tested.)
 
 ### CODE-05 · explain-why · easy
 - Source: `LinkService.resolve`
