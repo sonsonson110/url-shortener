@@ -53,6 +53,12 @@ app:
   shortener:
     base-url: ${SHORTENER_BASE_URL:http://localhost:8080}
     max-url-length: ${SHORTENER_MAX_URL_LENGTH:2048}
+  # Redirect cache (ADR 0004): TTL 60 s; lock 2 s; losers poll every 10 ms for at most 200 ms.
+  cache:
+    ttl: ${CACHE_TTL:60s}
+    lock-ttl: ${CACHE_LOCK_TTL:2s}
+    lock-wait: ${CACHE_LOCK_WAIT:200ms}
+    lock-poll: ${CACHE_LOCK_POLL:10ms}
 
 server:
   port: ${SERVER_PORT:8080}

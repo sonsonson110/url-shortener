@@ -1,3 +1,8 @@
 spring:
   flyway:
     enabled: true
+
+logging:
+  level:
+    # generate_statistics=true makes Hibernate log a metrics block per session; keep test output readable.
+    org.hibernate.engine.internal.StatisticalLoggingSessionEventListener: WARN

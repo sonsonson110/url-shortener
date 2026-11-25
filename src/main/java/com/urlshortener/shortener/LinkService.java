@@ -25,12 +25,15 @@ public class LinkService {
     private final LinkRepository linkRepository;
     private final ShortenerProperties properties;
     private final MeterRegistry meterRegistry;
+    private final RedirectCache redirectCache;
     private final Counter createdCounter;
 
-    public LinkService(LinkRepository linkRepository, ShortenerProperties properties, MeterRegistry meterRegistry) {
+    public LinkService(LinkRepository linkRepository, ShortenerProperties properties, MeterRegistry meterRegistry,
+                       RedirectCache redirectCache) {
         this.linkRepository = linkRepository;
         this.properties = properties;
         this.meterRegistry = meterRegistry;
+        this.redirectCache = redirectCache;
         this.createdCounter = Counter.builder("links.created")
                 .description("Short links created")
                 .register(meterRegistry);
@@ -58,24 +61,33 @@ public class LinkService {
     }
 
     /**
-     * Resolves a short code to its long URL.
+     * Resolves a short code to its long URL, through the Redis cache (ADR 0004).
+     *
+     * <p>Deliberately not {@code @Transactional}: a transaction would hold a Hikari connection
+     * while the request waits on Redis. The repository call opens its own read-only transaction,
+     * so a connection is held only for the query itself.
      *
      * @throws LinkNotFoundException if no such code exists
      * @throws LinkExpiredException  if the link has expired
      */
-    @Transactional(readOnly = true)
     public String resolve(String shortCode) {
-        Link link = linkRepository.findByShortCode(shortCode).orElse(null);
+        CachedLink link = redirectCache.getOrLoad(shortCode, () -> loadFromDatabase(shortCode));
         if (link == null) {
             countRedirect("not_found");
             throw new LinkNotFoundException(shortCode);
         }
-        if (link.getExpiresAt() != null && !link.getExpiresAt().isAfter(OffsetDateTime.now(ZoneOffset.UTC))) {
+        if (link.isExpired(OffsetDateTime.now(ZoneOffset.UTC))) {
             countRedirect("expired");
             throw new LinkExpiredException(shortCode);
         }
         countRedirect("hit");
-        return link.getLongUrl();
+        return link.longUrl();
+    }
+
+    private CachedLink loadFromDatabase(String shortCode) {
+        return linkRepository.findByShortCode(shortCode)
+                .map(l -> new CachedLink(l.getLongUrl(), l.getExpiresAt()))
+                .orElse(null);
     }
 
     private void countRedirect(String outcome) {
