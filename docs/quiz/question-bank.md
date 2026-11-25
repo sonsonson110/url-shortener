@@ -16,7 +16,7 @@ Entry format:
 Types: `recall`, `explain-why`, `find-the-bug`, `two-instances`, `design`, `predict`.
 Difficulty: `easy`, `medium`, `hard`.
 
-Last refreshed against commit: `2acb08c` (2026-11-21).
+Last refreshed against commit: `d06df71` (2026-11-25).
 
 The learning-log questions Q1–Q5 (`docs/learning-log.md`) are part of the pool too. They are referred to as `LL-Q1` … `LL-Q5` and have no reference answer here on purpose: grade them against the cited source.
 
@@ -300,3 +300,65 @@ The learning-log questions Q1–Q5 (`docs/learning-log.md`) are part of the pool
 - Source: `application.yml` management block
 - Q: Which Actuator endpoints are exposed over HTTP, and which one does Prometheus scrape?
 - Grading points: `health`, `info`, `prometheus`, `metrics`. Prometheus scrapes `/actuator/prometheus`.
+
+### OBS-07 · explain-why · hard
+- Source: `LinkService.create`, `LinkServiceCounterTest`, commit `2e99805`
+- Q: Why is `links.created` incremented in `TransactionSynchronization.afterCommit` instead of right after `save()`? How does `LinkServiceCounterTest` force the failure without mocks?
+- Grading points: `Link` has an assigned id, so `save()` only queues the INSERT. A constraint violation surfaces when the transaction flushes at commit, after `create()` has returned, so a counter bumped inside would count a row that was rolled back. The test burns `nextId()`, pre-inserts a "squatter" row under a different id with the short code of the next id, then asserts `create()` throws `DataAccessException` and the counter is unchanged. A second test asserts a normal create increments by exactly 1. It runs on real Postgres via Testcontainers.
+
+---
+
+## BENCH: Benchmarks and measurement
+
+### BENCH-01 · explain-why · medium
+- Source: `benchmarks/k6/scenarios/redirect-read-heavy.js` header, `benchmarks/REPORT.md` Method
+- Q: The k6 scenario uses an open model (`constant-arrival-rate`) instead of a fixed number of looping virtual users. Why does that matter when the server gets slow?
+- Grading points: in an open model requests arrive at a fixed rate whether or not earlier ones finished, so slow responses cannot throttle the offered load. A closed model would send fewer requests when the server slows, which hides the slowdown (coordinated omission). When the app can't keep up, k6 reports `dropped_iterations` instead.
+
+### BENCH-02 · explain-why · medium
+- Source: `benchmarks/k6/scenarios/redirect-read-heavy.js` (key distribution)
+- Q: Keys are drawn from a Zipf(s=1) distribution and then scattered over ids with a bijection (multiplier 1000003). Why Zipf, and why scatter?
+- Grading points: real traffic is skewed, with a few hot links taking most requests. That matters for a cache and for realistic DB page-cache behaviour. Uniform keys would understate hit rates. The scatter keeps the hot keys from being physically adjacent rows, which "would flatter the database". `SEED_ROWS` must be coprime with the multiplier for the mapping to be a bijection.
+
+### BENCH-03 · recall · medium
+- Source: `benchmarks/REPORT.md` v0-naive (Saturation point), `roadmap.md` §benchmarks
+- Q: How did the v0-naive baseline choose its measurement rate (3000 req/s), and what was the saturation result? What number should you not over-trust?
+- Grading points: a ramp (1 → 6000 req/s) found the knee. Throughput plateaus at about 4,450 req/s, p99 starts rising near 3,300 and passes 200 ms between 3,900 and 4,400. The measurement is run at about 70% of the saturation point. The "max RPS ≈ 3,900" comes from a single ramp and is only accurate to about one 30-second step (~270 req/s).
+
+### BENCH-04 · predict · hard
+- Source: `benchmarks/REPORT.md` v0-naive (Next bottleneck), `benchmarks/results/v0-naive/profile.md`
+- Q: At the knee, which resource is saturated: app CPU, Postgres CPU or the load generator? What did the JFR profile say about how much of the app's CPU is the DB access path, and what does that imply for a cache's gain?
+- Grading points: the app is at its 2-CPU cap (~200%). Postgres is at about half its limit (45–48% average at 3000 req/s) and k6 is not the limit. The profile at 3000 req/s attributed 40.2% of sampled request-thread time to the DB access path (Hibernate/JPA 25.9%, Hikari 5.7%, JDBC driver 4.5%), with 11.1% in Micrometer. So a cache hit removes at most about 40% of the app's work, and the gain is smaller than the DB share suggests. These are sampled Java time only, from a profiling run (not comparable to the baseline latencies).
+
+### BENCH-05 · find-the-bug · hard
+- Source: `deploy/docker-compose.bench.yml` header, commit `5b077c1`
+- Q: The bench stack declared `cpus: 2` for the app and Postgres, but a saturation run showed the app above 200% CPU in `docker stats`. What was wrong, how was it fixed, and what happened to the earlier results?
+- Grading points: Compose v2.3.3 silently ignores service-level `cpus:` (and mis-converts `deploy.resources.limits.cpus`), so the limits were never applied. Fix: `cpu_period: 100000` / `cpu_quota: 200000`, verified with `docker inspect` (CpuQuota=200000) and a CPU burn that held at about 199%. Results from before the fix ran without limits (knee about 5,400 req/s) and were discarded as not comparable.
+
+### BENCH-06 · explain-why · hard
+- Source: `benchmarks/predictions/v2-redis-cache.md`, `AGENTS.md` benchmark protocol
+- Q: Why does the repo store a written prediction for v2-redis-cache before the cache exists, and what were the numbers predicted? Name one weakness the agent's notes found.
+- Grading points: so the result can be compared with what you expected, and you can't rewrite expectations afterwards. Prediction (TTL 60 s, 1 instance): p99 steady 3 ms, hit rate about 40%, Postgres CPU 25–30%, app CPU 95–100%, knee 5000 rps. Weakness: the agent's rough model estimated about a 59% hit rate at a 60 s TTL, above the predicted 40%, and the knee of 5000 (+12%) assumes the DB path is a quarter to a third of the app's CPU per request. The owner left the numbers unchanged.
+
+---
+
+## DB: Query plans
+
+### DB-01 · predict · medium
+- Source: `benchmarks/results/v0-naive/explain-analyze.txt`, `benchmarks/REPORT.md` (Query plan analysis)
+- Q: On 10M rows, what plan does `select … from links where short_code = ?` use, and how many pages does it touch for an existing code vs. a missing code?
+- Grading points: Index Scan using `uq_links_short_code` (the unique B-tree index). 4 pages for a hit (3 index levels plus 1 table page), 3 for a miss (index only). Execution time about 0.06 ms.
+
+### DB-02 · explain-why · hard
+- Source: `benchmarks/results/v0-naive/explain-analyze.txt`, `benchmarks/REPORT.md`
+- Q: The report says a separate "add an index" benchmark version would change nothing. Why? What did forcing a sequential scan show?
+- Grading points: `short_code` already has a unique index (created by the UNIQUE constraint), and the planner picks it (the seed ends with `VACUUM ANALYZE`, `n_distinct = -1`). With index, bitmap and index-only scans disabled, Postgres did a Parallel Seq Scan over 113,531 pages (about 887 MB) in 532 ms vs 0.060 ms, about four orders of magnitude. That was a hand-forced session, not something the app does. Strong answers add that planning time (about 0.45–0.5 ms) exceeds execution time, and that whether the app reuses prepared plans was not checked.
+
+---
+
+## TOOL: Developer tooling
+
+### TOOL-01 · explain-why · medium
+- Source: `docs/adr/0003-postman-cli-for-manual-api-runs.md`
+- Q: ADR 0003 picks the Postman CLI over Newman, the desktop Runner and a curl script. Why, and name two costs the ADR accepts.
+- Grading points: it runs the collection straight from the workspace (no exported JSON to drift), runs locally so it can reach `localhost:8080` (cloud runners can't), the agent can run it and read real results, and it exits non-zero on failure. Costs: a new binary and a Postman login, results are uploaded to Postman Cloud, runs write real rows to the local DB, 9 of the 22 requests have no test script, and the installer edits agent config files unless turned off by flags. Postman results do not count as test or benchmark evidence.
