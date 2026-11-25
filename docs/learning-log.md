@@ -40,6 +40,7 @@ Entry format:
 - Re-ask: 2026-11-26
 - History:
   - 2026-11-22: partial
+  - 2026-11-23: partial
 
 ### Q2: What happens to the sequence value when the insert rolls back?
 - Piece: `LinkService.create`, `LinkRepository.nextId`
@@ -51,10 +52,10 @@ Entry format:
 - Box: 1
 - Re-ask: 2026-11-23
 
-### Q3: Find the bug in counter placement
+### Q3: Why the created counter increments in afterCommit
 - Piece: `LinkService.create` (`TransactionSynchronization.afterCommit`), `LinkServiceCounterTest`
-- Asked: 2026-11-21 (reworded 2026-11-25 after fix 2e99805)
-- Question: `create` now increments `links.created` in `afterCommit`. Why not simply increment right after `save()`, given that `Link` has an assigned id? Which test pins this, and how does it force the failure?
+- Asked: 2026-11-21
+- Question: Why does `create` increment the counter in `afterCommit` instead of inline? What failure does `LinkServiceCounterTest` force, and what does it assert? (Reworded 2026-11-23: the old version asked to find a bug the source had already fixed.)
 - Answer: Counter increments but isn't decremented if commit fails; wrap whole transaction in one block, increment only after it completes. No test named.
 - Verdict: partial
 - Feedback: Vague fix, no test named (LinkServiceCounterTest). STALE: source now uses afterCommit.
@@ -62,6 +63,7 @@ Entry format:
 - Re-ask: 2026-11-26
 - History:
   - 2026-11-22: partial
+  - 2026-11-23: partial
 
 ### Q4: Expiry boundary
 - Piece: `LinkService.resolve`
@@ -104,6 +106,7 @@ Entry format:
 - Re-ask: 2026-11-26
 - History:
   - 2026-11-22: partial
+  - 2026-11-23: partial
 
 ### CODE-04: Why a regex on the redirect mapping
 - Piece: `RedirectController.java`
@@ -116,6 +119,7 @@ Entry format:
 - Re-ask: 2026-11-28
 - History:
   - 2026-11-22: partial
+  - 2026-11-23: partial
 
 ### OBS-04: Scraped metric names
 - Piece: `LinkService.java`
@@ -128,6 +132,7 @@ Entry format:
 - Re-ask: 2026-11-28
 - History:
   - 2026-11-22: wrong
+  - 2026-11-23: partial
 
 ## Retired
 
