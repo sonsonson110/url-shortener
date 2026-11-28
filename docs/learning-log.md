@@ -134,6 +134,36 @@ Entry format:
   - 2026-11-22: wrong
   - 2026-11-23: partial
 
+### Q6: Why the winner stores before releasing the lock
+- Piece: `RedirectCache.loadAsWinner`, `RedirectCache.waitForWinner`, `docs/adr/0004-cache-stampede-protection.md`
+- Asked: 2026-11-28
+- Question: Why must the winner store the value before releasing the lock? Which part of the waiter logic depends on that order?
+- Answer: If the winner released first, there is a case where the store fails, then all waiters query the DB anyway; the lock-gone branch breaks the loop and queries the DB. Storing first does not break the polling.
+- Verdict: partial
+- Feedback: Right that the lock-gone branch (`lock_gone_empty`) falls through to Postgres. But a failed store hits Postgres in either order, so it does not explain the ordering. The point is the normal, successful case: the waiter checks EXISTS lock and then GET value, and reasons "lock gone, so the store already happened". That holds only because `store` runs in the `try` and `release` in the `finally`. Release first and a waiter can see the lock gone before the value lands, which brings back the race fixed in 0844ce4.
+- Box: 1
+- Re-ask: 2026-11-29
+
+### Q7: Winner slower than the lock TTL
+- Piece: `RedirectCache` (`lock-ttl` 2 s, `lock-wait` 200 ms, `RELEASE_LOCK` script)
+- Asked: 2026-11-28
+- Question: The winner's Postgres query takes 3 s (longer than `lock-ttl`). Walk through what happens to the lock, the waiters, and the release script.
+- Answer: Waiters for A query the DB anyway. With no cache write yet, a new winner B takes the lock. The slow query returns and sets the cache, but cannot clear B's lock because the script checks the holder. B's waiters get the cache; B stores and releases its own lock.
+- Verdict: partial
+- Feedback: Correct: lock expires at 2 s, B can win, and the token check stops A from deleting B's lock. Missed the 200 ms to 2 s window: waiters give up after `lock-wait`, not when the lock expires, so every request in that window misses, fails SET NX, waits 200 ms, times out (`wait_timeout`) and queries Postgres anyway. With a slow DB the lock adds latency without reducing load. That trade-off belongs in ADR 0004's Consequences.
+- Box: 1
+- Re-ask: 2026-11-29
+
+### Q8: Stampede protection across two instances
+- Piece: `RedirectCache.getOrLoad` (`SET NX PX`), `docs/adr/0004-cache-stampede-protection.md`
+- Asked: 2026-11-28
+- Question: Two app instances get a burst of cold requests for the same code at the same moment. How many Postgres queries happen, and why?
+- Answer: 1 query. Redis is the central place for the lock and cache polling; every app instance looks at the same Redis keys.
+- Verdict: correct
+- Feedback: Correct. To strengthen it, add why: `SET key token NX PX` is one atomic command and Redis runs commands one at a time, so only one SET NX can succeed across all instances. Also name when it stops being 1: Redis down (fail-open, every request queries) and a winner slower than `lock-wait` (see Q7).
+- Box: 2
+- Re-ask: 2026-12-01
+
 ## Retired
 
 None yet.
