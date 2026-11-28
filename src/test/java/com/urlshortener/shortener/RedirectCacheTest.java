@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ class RedirectCacheTest extends AbstractIntegrationTest {
     @Autowired MeterRegistry meterRegistry;
     @Autowired StringRedisTemplate redis;
     @Autowired EntityManagerFactory entityManagerFactory;
+    @Autowired CacheProperties cacheProperties;
 
     private Statistics stats() {
         return entityManagerFactory.unwrap(SessionFactory.class).getStatistics();
@@ -92,6 +94,7 @@ class RedirectCacheTest extends AbstractIntegrationTest {
         int threads = 32;
         long before = stats().getQueryExecutionCount();
         double winnersBefore = meterRegistry.counter("links.cache.lock", "outcome", "won").count();
+        double waitedHitsBefore = meterRegistry.counter("links.cache.lock", "outcome", "waited_hit").count();
 
         ExecutorService pool = Executors.newFixedThreadPool(threads);
         CountDownLatch go = new CountDownLatch(1);
@@ -113,5 +116,43 @@ class RedirectCacheTest extends AbstractIntegrationTest {
                 .isEqualTo(1);
         assertThat(meterRegistry.counter("links.cache.lock", "outcome", "won").count() - winnersBefore)
                 .isEqualTo(1);
+        // Without this, the test also passes if the threads happened to run one after another
+        // (the first loads, the rest get plain hits) and the lock-wait path never ran.
+        assertThat(meterRegistry.counter("links.cache.lock", "outcome", "waited_hit").count() - waitedHitsBefore)
+                .as("requests that lost the lock and were served by the winner's load")
+                .isGreaterThanOrEqualTo(1);
+    }
+
+    @Test
+    void waiterFallsBackToPostgresWhenLockHolderNeverFillsTheCache() {
+        String code = createLink("https://example.com/stuck", null);
+        String lockKey = "lock:link:" + code;
+        // Simulate a winner that took the lock and then hung: the lock stays, the value never appears.
+        redis.opsForValue().set(lockKey, "someone-else", Duration.ofSeconds(30));
+        long queriesBefore = stats().getQueryExecutionCount();
+        double timeoutsBefore = meterRegistry.counter("links.cache.lock", "outcome", "wait_timeout").count();
+
+        try {
+            long start = System.nanoTime();
+            String url = linkService.resolve(code);
+            Duration elapsed = Duration.ofNanos(System.nanoTime() - start);
+
+            assertThat(url).isEqualTo("https://example.com/stuck");
+            assertThat(elapsed)
+                    .as("waits about lock-wait, not until the 30 s lock expires")
+                    .isGreaterThanOrEqualTo(cacheProperties.lockWait())
+                    .isLessThan(cacheProperties.lockTtl());
+            assertThat(meterRegistry.counter("links.cache.lock", "outcome", "wait_timeout").count() - timeoutsBefore)
+                    .isEqualTo(1);
+            assertThat(stats().getQueryExecutionCount() - queriesBefore).isEqualTo(1);
+            assertThat(redis.hasKey("link:" + code))
+                    .as("the fallback load still fills the cache")
+                    .isTrue();
+            assertThat(redis.opsForValue().get(lockKey))
+                    .as("a waiter must not delete a lock it does not own")
+                    .isEqualTo("someone-else");
+        } finally {
+            redis.delete(lockKey);
+        }
     }
 }
