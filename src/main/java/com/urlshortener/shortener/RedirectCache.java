@@ -116,12 +116,17 @@ class RedirectCache {
         try {
             while (System.nanoTime() < deadline) {
                 Thread.sleep(pollMillis);
+                // Check the lock BEFORE reading the value. The winner stores the value before it
+                // releases the lock, so if the lock is already gone here, the GET below sees any
+                // value the winner wrote. In the reverse order (GET, then EXISTS) the winner can
+                // store and release between the two calls, and we would query Postgres for nothing.
+                boolean lockGone = !Boolean.TRUE.equals(redis.hasKey(lockKey));
                 String raw = redis.opsForValue().get(key);
                 if (raw != null) {
                     countLock("waited_hit");
                     return decode(raw);
                 }
-                if (!Boolean.TRUE.equals(redis.hasKey(lockKey))) {
+                if (lockGone) {
                     outcome = "lock_gone_empty";
                     break;
                 }
